@@ -1,4 +1,10 @@
-# admin
+# about
+```
+Focus on background templates
+
+adminui base on  vue+element-ui develop
+
+```
 
 ## Project setup
 ```
