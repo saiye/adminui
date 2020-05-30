@@ -1,10 +1,12 @@
 <template>
         <el-table :data="tableData">
-            <el-table-column prop="date" label="日期" width="140">
+            <el-table-column prop="id" label="角色id" width="140">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" width="120">
+            <el-table-column prop="role_name" label="角色名称" width="120">
             </el-table-column>
-            <el-table-column prop="address" label="地址">
+            <el-table-column  align="right" label="操作">
+                <el-button size="mini" round>Edit</el-button>
+                <el-button size="mini" type="danger" round>Delete</el-button>
             </el-table-column>
         </el-table>
 </template>
@@ -12,9 +14,8 @@
     export default {
         data() {
             const item = {
-                date: '2016-05-02',
-                name: 'buffer',
-                address: '广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！广州市天德广场！'
+                id: '1',
+                role_name: 'buffer',
             };
             return {
                 tableData: Array(20).fill(item),
