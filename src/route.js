@@ -47,6 +47,13 @@ export const constantRoutes = [
                 meta: {title: '添加用户', icon: 'example'},
             },
             {
+                path: 'user-detail',
+                name: 'sys-edit-user',
+                component: () => import('./views/sys/add_user'),
+                hidden: true,
+                meta: {title: '用户详情', icon: 'example'},
+            },
+            {
                 path: 'role-list',
                 name: 'sys-role-list',
                 component: () => import('./views/sys/role_list'),
@@ -59,6 +66,13 @@ export const constantRoutes = [
                 component: () => import('./views/sys/add_role'),
                 hidden: true,
                 meta:{title: '添加角色', icon: 'example'},
+            },
+            {
+                path: 'edit-role',
+                name: 'sys-edit-role',
+                component: () => import('./views/sys/edit_role'),
+                hidden:true,
+                meta:{title: '编辑权限', icon: 'example'},
             },
         ]
     },

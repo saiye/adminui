@@ -23,34 +23,6 @@ export function delRole() {
     })
 }
 
-export function addUser() {
-    return request({
-        url: '/main/sys/add-user',
-        method: 'post'
-    })
-}
-
-export function editUser() {
-    return request({
-        url: '/main/sys/edit-user',
-        method: 'post'
-    })
-}
-
-export function lockUser() {
-    return request({
-        url: '/main/sys/lock-user',
-        method: 'post'
-    })
-}
-
-export function userList() {
-    return request({
-        url: '/main/sys/user-list',
-        method: 'get'
-    })
-}
-
 export function editAct() {
     return request({
         url: '/main/sys/edit-act',
