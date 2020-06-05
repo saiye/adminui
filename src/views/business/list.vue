@@ -205,6 +205,7 @@
     </el-tabs>
 </template>
 <script>
+    import {companyList,addCompany,checkCompany} from '@/api/company'
     export default {
         data() {
             return {
