@@ -15,6 +15,8 @@
             </el-table-column>
             <el-table-column prop="role_name" label="所属角色">
             </el-table-column>
+            <el-table-column prop="email" label="邮箱">
+            </el-table-column>
             <el-table-column prop="lock_status" label="状态">
             </el-table-column>
             <el-table-column align="right" label="操作">

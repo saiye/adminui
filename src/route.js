@@ -20,9 +20,9 @@ export const constantRoutes = [
     {
         path: '/',
         name: 'home',
-        redirect: '/sys/user-list',
+        redirect: '/business/list',
         hidden: true,
-        meta: { requiresAuth: true}
+        meta: { requiresAuth: false }
     },
     {
         path: '/sys',
@@ -64,7 +64,7 @@ export const constantRoutes = [
                 path: 'add-role',
                 name: 'sys-add-role',
                 component: () => import('./views/sys/add_role'),
-                hidden: true,
+                hidden: false,
                 meta:{title: '添加角色', icon: 'example'},
             },
             {
@@ -73,6 +73,74 @@ export const constantRoutes = [
                 component: () => import('./views/sys/edit_role'),
                 hidden:true,
                 meta:{title: '编辑权限', icon: 'example'},
+            },
+        ]
+    },
+    {
+        path: '/business',
+        component: Layout,
+        name: 'business-list',
+        hidden:false,
+        redirect: '/business/list',
+        meta: {title: '商家管理', icon: 'example'},
+        children: [
+            {
+                path: 'list',
+                name: 'business-list',
+                component: () => import('./views/business/list'),
+                hidden: false,
+                meta: {title: '商家管理', icon: 'example'},
+            },
+        ]
+    },
+    {
+        path: '/store',
+        component: Layout,
+        name: 'store-list',
+        hidden:false,
+        redirect: '/store/list',
+        meta: {title: '店面管理', icon: 'example'},
+        children: [
+            {
+                path: 'list',
+                name: 'store-list',
+                component: () => import('./views/store/list'),
+                hidden: false,
+                meta: {title: '店面管理', icon: 'example'},
+            },
+        ]
+    },
+    {
+        path: '/room',
+        component: Layout,
+        name: 'room-list',
+        hidden:false,
+        redirect: '/room/list',
+        meta: {title: '房间管理', icon: 'example'},
+        children: [
+            {
+                path: 'list',
+                name: 'room-list',
+                component: () => import('./views/room/list'),
+                hidden: false,
+                meta: {title: '房间管理', icon: 'example'},
+            },
+        ]
+    },
+    {
+        path: '/member',
+        component: Layout,
+        name: 'member-list',
+        hidden:false,
+        redirect: '/member/list',
+        meta: {title: '会员管理', icon: 'example'},
+        children: [
+            {
+                path: 'list',
+                name: 'member-list',
+                component: () => import('./views/member/list'),
+                hidden: false,
+                meta: {title: '房间管理', icon: 'example'},
             },
         ]
     },

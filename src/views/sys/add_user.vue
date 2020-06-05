@@ -46,7 +46,9 @@
             }
         },
         mounted() {
-            this.userInfo();
+            if(this.$route.name=='sys-edit-user'){
+                this.userInfo();
+            }
             this.loadRoleList();
         },
         methods: {
@@ -111,10 +113,21 @@
                 })
             },
             userInfo(){
-                this.form.user_name=this.$route.params.user_name;
-                this.form.user_id=this.$route.params.id;
-                this.form.role_id=this.$route.params.role_id;
-                this.form.email=this.$route.params.email;
+                if(this.$route.params.user_name){
+                    //用户列表过来查看
+                    this.form.user_name=this.$route.params.user_name;
+                    this.form.user_id=this.$route.params.id;
+                    this.form.role_id=this.$route.params.role_id;
+                    this.form.email=this.$route.params.email;
+                }else{
+                    console.log('email--'+this.$store.getters.user_id)
+                    //此处过来的用户是，查看个人登录资料
+                    this.form.user_name=this.$store.getters.user_name;
+                    this.form.user_id=this.$store.getters.user_id;
+                    this.form.role_id=this.$store.getters.role_id;
+                    this.form.email=this.$store.getters.email;
+                    //load user info
+                }
             },
             canceHandel(){
                 this.$router.go(-1);
