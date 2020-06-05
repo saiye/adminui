@@ -1,5 +1,4 @@
 import request from 'utils/request'
-
 export function companyList(data) {
     return request({
         url: '/company/Index/companyList',
@@ -7,7 +6,6 @@ export function companyList(data) {
         data
     })
 }
-
 export function addCompany(data) {
     return request({
         url: '/company/Index/addCompany',
@@ -15,7 +13,6 @@ export function addCompany(data) {
         data
     })
 }
-
 export function checkCompany(data) {
     return request({
         url: '/company/Index/checkCompany',
