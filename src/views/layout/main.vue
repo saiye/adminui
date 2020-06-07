@@ -1,17 +1,21 @@
 <template>
-    <el-container style="height:auto; border: 1px solid #eee">
-        <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-            <el-menu :default-openeds="['0']"  class="left">
-                <el-submenu index="0" v-for="item in routes" :key="item.name">
-                    <template slot="title"><i class="el-icon-odometer"></i>{{item.meta.title}}</template>
-                    <el-menu-item-group v-if="item.children.length>1">
-                        <template>
-                            <el-menu-item @click="selectMenu(sub.name,'')" index="sub.name" v-for="sub in item.children.filter(function (item) { return !(item.hidden);})"
-                                          :key="sub.name">
-                                <i class="el-icon-setting"></i>
-                                <span slot="title">{{sub.meta.title}}</span>
-                            </el-menu-item>
-                        </template>
+    <el-container >
+        <el-aside width="200px">
+            <el-menu
+                    :default-active="$route.name"
+                    class="el-menu-vertical-demo"
+                    active-text-color="#ffd04b">
+
+                <el-submenu index="item.name"  v-for="item in routes" :key="item.name">
+                    <template slot="title">
+                        <i class="el-icon-location"></i>
+                        <span>{{item.meta.title}}</span>
+                    </template>
+                    <el-menu-item-group >
+                        <template slot="title">{{item.meta.title}}</template>
+                        <el-menu-item :index="sub.name"  @click="selectMenu(sub.name,'')" v-for="sub in item.children.filter(function (item) { return !(item.hidden);})" :key="sub.name">
+                            <span slot="title">{{sub.meta.title}}</span>
+                        </el-menu-item>
                     </el-menu-item-group>
                 </el-submenu>
                 <el-menu-item index="item.name" v-for="item in singleRoutes" :key="item.name" @click="selectMenu(item.name,'')">
@@ -19,8 +23,9 @@
                     <span slot="title">{{item.meta.title}}</span>
                 </el-menu-item>
             </el-menu>
+
         </el-aside>
-        <el-container>
+        <el-main>
             <el-header style="text-align: right; font-size: 12px">
                 <el-dropdown>
                     <i class="el-icon-setting" style="margin-right: 15px"></i>
@@ -32,14 +37,11 @@
                 </el-dropdown>
                 <span>{{user_name}}</span>
             </el-header>
-            <el-main>
-                <!--main  box start-->
-                <router-view></router-view>
-                <!--main  box end-->
-            </el-main>
-        </el-container>
+            <!--main  box start-->
+            <router-view></router-view>
+            <!--main  box end-->
+        </el-main>
     </el-container>
-
 </template>
 <script>
     import route from "@/route.js";
@@ -77,20 +79,23 @@
     }
 </script>
 <style>
-    .breadcrumb-box {
-        height: 20px;
-        margin-top: 5px;
-        margin-bottom: 10px;
+    html,body,.el-container{
+        margin: 0;
+        height: 100vh;
+        width: 100vw;
     }
-    .el-header {
-        color: #333;
-        line-height: 60px;
+    .el-aside{
+        width: 100vw;
+        border-right: solid 1px #e6e6e6;
+        border-right-width: 1px;
+        border-right-style: solid;
+        border-right-color: rgb(230, 230, 230);
     }
-    .el-aside {
-        color: #333;
-    }
-    .el-container {
-        min-height: 1000px;
+    .el-main{
+        height: 100%;
+        margin: 0;
+        padding-left:20px;
+        background-color: #FFF;
     }
 </style>
 
