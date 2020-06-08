@@ -77,6 +77,29 @@ export const constantRoutes = [
         ]
     },
     {
+        path: '/logs',
+        component: Layout,
+        redirect: '/logs/action-list',
+        name: 'logs',
+        hidden: false,
+        meta: {title: '日志管理', icon: 'example'},
+        children: [
+            {
+                path: 'action-list',
+                name: 'logs-action-list',
+                component: () => import('./views/logs/action_list'),
+                hidden: false,
+                meta: {title: '操作日志', icon: 'example'},
+            },{
+                path: 'error',
+                name: 'logs-error',
+                component: () => import('./views/logs/error'),
+                hidden: false,
+                meta: {title: '系统日志', icon: 'example'},
+            },
+        ]
+    },
+    {
         path: '/business',
         component: Layout,
         name: 'business-list',

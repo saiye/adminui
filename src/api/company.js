@@ -1,4 +1,4 @@
-import request from 'utils/request'
+import request from '../tools/request'
 export function companyList(data) {
     return request({
         url: '/company/Index/companyList',
@@ -18,5 +18,12 @@ export function checkCompany(data) {
         url: '/company/Index/checkCompany',
         method: 'post',
         data
+    })
+}
+
+export function getStateData() {
+    return request({
+        url: '/company/Index/getState',
+        method: 'post',
     })
 }

@@ -5,22 +5,23 @@
                     :default-active="$route.name"
                     class="el-menu-vertical-demo"
                     active-text-color="#ffd04b">
-
-                <el-submenu index="item.name"  v-for="item in routes" :key="item.name">
+                <el-submenu :index="item.name"  v-for="item in routes" :key="item.name">
                     <template slot="title">
-                        <i class="el-icon-location"></i>
+                        <i class="el-icon-odometer"></i>
                         <span>{{item.meta.title}}</span>
                     </template>
                     <el-menu-item-group >
                         <template slot="title">{{item.meta.title}}</template>
                         <el-menu-item :index="sub.name"  @click="selectMenu(sub.name,'')" v-for="sub in item.children.filter(function (item) { return !(item.hidden);})" :key="sub.name">
+                            <i class="el-icon-odometer"></i>
                             <span slot="title">{{sub.meta.title}}</span>
                         </el-menu-item>
                     </el-menu-item-group>
                 </el-submenu>
-                <el-menu-item index="item.name" v-for="item in singleRoutes" :key="item.name" @click="selectMenu(item.name,'')">
+
+                <el-menu-item index="s.name" v-for="s in singleRoutes" :key="s.name" @click="selectMenu(s.name,'')">
                     <i class="el-icon-odometer"></i>
-                    <span slot="title">{{item.meta.title}}</span>
+                    <span slot="title">{{s.meta.title}}</span>
                 </el-menu-item>
             </el-menu>
 

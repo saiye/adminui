@@ -8,7 +8,7 @@ module.exports = {
         proxy: {
             //配置跨域
             '/api': {
-                target: "http://192.168.3.8",
+                target: "http://www.bs.com",
                 changeOrigin: true, // needed for virtual hosted sites
                 ws: true, // proxy websockets
                 pathRewrite:{

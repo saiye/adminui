@@ -1,34 +1,42 @@
-<el-button type="text" @click="dialogVisible = true">点击打开 Dialog</el-button>
 <template>
-    <el-dialog
-            title="提示"
-            :visible.sync="dialogVisible"
-            width="30%"
-            :before-close="handleClose">
-        <span>这是一段信息</span>
-        <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
-    </el-dialog>
+
 </template>
 <script>
     export default {
-        'name': 'lrs_add_business',
+        'name': 'add_business',
         data() {
             return {
-                dialogVisible: false
+                dialogImageUrl: '',
+                dialogImgVisible:false,
+                visibleDialog:this.visible,
+                dialog_form: {
+                    business_name: '',
+                    state: '',
+                    relation_name: '',
+                    relation_phone: '',
+                    percent: 100,
+                    user_name: '',
+                    password: '',
+                    sex: 1,
+                },
             };
         },
         methods: {
-            handleClose(done) {
-                this.$confirm('确认关闭？')
-                    .then(_ => {
-                        done();
-                    })
-                    .catch(_ => {
-                    });
-            }
+            businessDialogCance() {
+                this.$emit('cance')
+                //this.dialogVisible=false;
+            },
+            businessDialogConfirm() {
+                this.$emit('confirm')
+                //this.dialogVisible=false;
+            },
+            handleRemove(file, fileList) {
+                console.log(file, fileList);
+            },
+            handlePictureCardPreview(file) {
+                this.dialogImageUrl = file.url;
+                this.dialogImgVisible = true;
+            },
         }
     };
 </script>
