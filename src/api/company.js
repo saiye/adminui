@@ -27,3 +27,10 @@ export function getStateData() {
         method: 'post',
     })
 }
+export function areaList(data) {
+    return request({
+        url: '/company/Index/areaList',
+        method: 'post',
+        data
+    })
+}

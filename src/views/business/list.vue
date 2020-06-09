@@ -33,17 +33,7 @@
           <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
         </el-form-item>
       </el-form>
-
-      <el-row>
-        <el-col :span="24">
-          <el-button
-            size="mini"
-            style="float: right;margin-right: 20px;margin-bottom: 10px;"
-            @click="dialogVisible=true"
-            round
-          >添加商户</el-button>
-        </el-col>
-      </el-row>
+      <add_business v-bind:state="state" v-on:success="loadBusinessListData"></add_business>
       <el-table
         v-loading="BusinessLoading"
         :data="tableBusinessData"
@@ -85,72 +75,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-dialog title="添加商户" :visible.sync="dialogVisible" width="700px">
-        <div class="add-dialog-box">
-          <el-form ref="form" :model="dialog_form" label-width="80px">
-            <el-form-item label="商户名称">
-              <el-input v-model="dialog_form.company_name"></el-input>
-            </el-form-item>
-            <el-form-item label="所在国家">
-              <el-select v-model="dialog_form.state_id" clearable placeholder="请选择活动区域">
-                <el-option
-                  v-for="item in state"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                ></el-option>
-              </el-select>
-            </el-form-item>
 
-            <el-form-item label="营业执照">
-              <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
-                list-type="picture-card"
-                :on-preview="handlePictureCardPreview"
-                :on-remove="handleRemove"
-              >
-                <i class="el-icon-plus"></i>
-              </el-upload>
-              <el-dialog
-                width="30%"
-                title="营业执照-原图"
-                :visible.sync="dialogImgVisible"
-                append-to-body
-              >
-                <img width="100%" :src="dialogImageUrl" alt />
-              </el-dialog>
-            </el-form-item>
-
-            <el-form-item label="联系人">
-              <el-input v-model="dialog_form.real_name">
-                <template slot="append">
-                  <el-radio v-model="dialog_form.sex" label="1">男</el-radio>
-                  <el-radio v-model="dialog_form.sex" label="2">女</el-radio>
-                </template>
-              </el-input>
-            </el-form-item>
-            <el-form-item label="手机号码">
-              <el-input v-model="dialog_form.phone">
-                <template slot="prepend">+86中国大陆</template>
-              </el-input>
-            </el-form-item>
-
-            <el-form-item label="分成比例">
-              <el-input v-model="dialog_form.proportion"></el-input>
-            </el-form-item>
-            <el-form-item label="商户账号">
-              <el-input v-model="dialog_form.account"></el-input>
-            </el-form-item>
-            <el-form-item label="商户密码">
-              <el-input v-model="dialog_form.password" show-password></el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-        <span slot="footer" class="dialog-footer">
-          <el-button @click="businessDialogCance">取 消</el-button>
-          <el-button type="primary" @click="businessDialogConfirm">确 定</el-button>
-        </span>
-      </el-dialog>
     </el-tab-pane>
     <el-tab-pane label="商户审核" name="check">
       <el-form :inline="true" :model="check_list" class="demo-form-inline">
@@ -231,8 +156,8 @@
               :layout="BusinessCheckPaginate.layout"
               :total="BusinessCheckPaginate.total"
               :current-page="BusinessCheckPaginate.pageIndex"
-              @current-change="handleBusinessChangePage"
-              @size-change="handleBusinessChangeSize"
+              @current-change="handleCheckBusinessChangePage"
+              @size-change="handleCheckBusinessChangeSize"
             ></el-pagination>
           </div>
         </el-col>
@@ -247,10 +172,10 @@ import {
   checkCompany,
   getStateData
 } from "@/api/company";
+import add_business from '@/components/business/add_business'
 export default {
   data() {
     return {
-      dialogVisible: false,
       activeName: "list",
       formLabelWidth: "120px",
       tableBusinessData: [],
@@ -258,7 +183,7 @@ export default {
       BusinessPaginate: {
         total: 0, // 总数
         pageIndex: 1, // 当前位于哪页
-        pageSize: 15, // 1页显示多少条
+        pageSize:15, // 1页显示多少条
         pageSizes: [5, 10, 15, 20], //每页显示多少条
         layout: "total, sizes, prev, pager, next, jumper" // 翻页属性
       },
@@ -269,8 +194,6 @@ export default {
         pageSizes: [5, 10, 15, 20], //每页显示多少条
         layout: "total, sizes, prev, pager, next, jumper" // 翻页属性
       },
-      dialogImageUrl: "",
-      dialogImgVisible: false,
       BusinessLoading: false,
       BusinessCheckLoading: false,
       CheckLoading: false,
@@ -294,19 +217,9 @@ export default {
         start_date: "",
         end_date: "",
         listDate: "",
-        page: 1,
+        page:1,
         limit: 15,
         check: [0, 2]
-      },
-      dialog_form: {
-        company_name: "",
-        state_id: "",
-        real_name: "",
-        phone: "",
-        proportion: 100,
-        account: "",
-        password: "",
-        sex: 1
       },
       state: null,
       check: [1, 2],
@@ -343,6 +256,9 @@ export default {
       }
     };
   },
+  components:{
+    add_business
+  },
   mounted() {
     this.loadBusinessListData();
     this.loadStateData();
@@ -358,8 +274,6 @@ export default {
     },
     loadBusinessListData() {
       this.form_list.check = [1];
-      (this.form_list.limit = this.BusinessPaginate.pageSize),
-        (this.form_list.page = this.BusinessPaginate.pageIndex),
         companyList(this.form_list)
           .then(response => {
             this.tableBusinessData = response.data.data.data;
@@ -401,40 +315,31 @@ export default {
           });
     },
     handleBusinessChangePage(page) {
-      (this.check_list.page = page), this.loadBusinessListData();
+      this.form_list.page = page
+      console.log('page:'+page)
+      this.loadBusinessListData();
+    },
+    handleBusinessChangeSize(pageSize) {
+      console.log('pageSize:'+pageSize)
+      this.form_list.limit=pageSize;
+      this.BusinessPaginate.pageSize = pageSize;
+      this.loadBusinessListData();
+    },
+    handleCheckBusinessChangePage(page) {
+      this.check_list.page = page
+      console.log('page:'+page)
+      this.loadBusinessListData();
+    },
+    handleCheckBusinessChangeSize(pageSize) {
+      console.log('pageSize:'+pageSize)
+      this.BusinessCheckPaginate.pageSize = pageSize;
+      this.check_list.limit=pageSize;
+      this.loadBusinessListData();
     },
     onSearchList() {},
     onSearchCheckList() {},
-    handleBusinessChangeSize(pageSize) {
-      this.paginations.pageSize = pageSize;
-      this.loadBusinessListData();
-    },
     onSubmit() {
       console.log("submit!");
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url;
-      this.dialogImgVisible = true;
-    },
-    businessDialogCance() {
-      this.dialogVisible = false;
-    },
-    businessDialogConfirm() {
-      addCompany(this.dialog_form)
-        .then(response => {
-          this.dialogVisible = false;
-          this.loadBusinessListData();
-          this.loadCheckListData();
-        })
-        .catch(function(error) {
-          console.log(error);
-        })
-        .then(function() {
-          console.log("add role onSubmit");
-        });
     },
     handleCheckPass(index, row) {
       let param = {
