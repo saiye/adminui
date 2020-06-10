@@ -31,7 +31,7 @@
 <script>
     import {roleList} from '@/api/role';
     import {addUser,editUser} from '@/api/user';
-    import {Message, MessageBox} from "element-ui";
+
     export default {
         data() {
             return {
@@ -62,37 +62,24 @@
                 };
                 if(this.$route.name=='sys-add-user'){
                     addUser(param).then(res=>{
-                        Message({
-                            message:res.message,
-                            type: 'success',
-                            duration: 5 * 1000
-                        })
+                       this.$router.push({
+                            'name':'sys-user-list'
+                        });
                     }).catch(error=>{
 
                     }).then(res=>{
-                        this.$router.push({
-                            'name':'sys-user-list'
-                        });
+
                     });
                     console.log('add user!');
                 }else{
                     editUser(param).then(res=>{
-                        Message({
-                            message:res.message,
-                            type: 'success',
-                            duration: 5 * 1000
-                        })
-                    }).catch(error=>{
-                        Message({
-                            message:error.message(),
-                            type: 'error',
-                            duration: 5 * 1000
-                        })
-
-                    }).then(res=>{
-                        this.$router.push({
+                       this.$router.push({
                             'name':'sys-user-list'
                         });
+                    }).catch(error=>{
+
+                    }).then(res=>{
+
                     });
 
                 }

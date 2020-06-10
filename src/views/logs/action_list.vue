@@ -1,5 +1,17 @@
 <template>
     <div>
+        <el-form :inline="true" label-width="80px"  size="mediumfff" :model="form_list" class="demo-form-inline">
+            <el-form-item  label="用户名">
+                <el-input v-model="form_list.user" placeholder="请输入user"></el-input>
+            </el-form-item>
+            <el-form-item label="uri">
+                <el-input v-model="form_list.uri" placeholder="请输入uri"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
+            </el-form-item>
+        </el-form>
         <el-table
                 v-loading="loading"
                 :data="tableData"
@@ -52,6 +64,13 @@
             return {
                 tableData: [],
                 loading: true,
+                form_list:{
+                  page:1,
+                  limit:15,
+                  user:'',
+                  http_type:'',
+                  uri:'',
+                },
                 //需要给分页组件传的信息
                 paginate: {
                     total: 0,        // 总数
@@ -67,11 +86,8 @@
         },
         methods: {
             loadData() {
-                let param = {
-                    limit: this.paginate.pageSize,
-                    page: this.paginate.pageIndex
-                }
-                actionLogList(param).then(response => {
+
+                actionLogList(this.form_list).then(response => {
                     this.tableData = response.data.data.data
                     this.loading = false;
                     this.paginate.total = response.data.data.total;
@@ -79,19 +95,31 @@
                     // handle error
                     console.log(error);
                 }).then(function () {
-                    console.log('add role onSubmit');
+
                 });
             },
             // 每页多少条切换
             handleSizeChange(pageSize) {
-                this.paginate.pageSize = pageSize;
+                this.form_list.limit = pageSize;
                 this.loadData();
             },
             // 上下分页
             handleCurrentChange(page) {
-                this.paginate.pageIndex = page;
+                this.form_list.page= page;
                 this.loadData();
             },
+            onSearchList(){
+                actionLogList(this.form_list).then(response => {
+                    this.tableData = response.data.data.data
+                    this.loading = false;
+                    this.paginate.total = response.data.data.total;
+                }).catch(function (error) {
+                    // handle error
+                    console.log(error);
+                }).then(function () {
+
+                });
+            }
         }
     };
 </script>

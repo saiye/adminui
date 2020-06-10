@@ -58,14 +58,11 @@ service.interceptors.response.use(
                         location.reload()
                     })
                 }).catch(err=>{
-                    console.log('request.js--catch--err');
                     console.log(err);
                 })
             }
-            return Promise.reject(new Error(res.message || 'Error'))
-        } else {
-            return res;
         }
+        return res;
     },
     error => {
         console.log('err' + error) // for debug

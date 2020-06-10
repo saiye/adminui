@@ -33,12 +33,12 @@
             <el-col :span="24">
                 <div class="pagination">
                     <el-pagination background
-                                   v-if='paginations.total > 0'
-                                   :page-sizes="paginations.pageSizes"
-                                   :page-size="paginations.pageSize"
-                                   :layout="paginations.layout"
-                                   :total="paginations.total"
-                                   :current-page='paginations.pageIndex'
+                                   v-if='paginate.total > 0'
+                                   :page-sizes="paginate.pageSizes"
+                                   :page-size="paginate.pageSize"
+                                   :layout="paginate.layout"
+                                   :total="paginate.total"
+                                   :current-page='paginate.pageIndex'
                                    @current-change='handleCurrentChange'
                                    @size-change='handleSizeChange'>
                     </el-pagination>
@@ -58,13 +58,19 @@
                 tableData: [],
                 loading: true,
                 //需要给分页组件传的信息
-                paginations: {
+                paginate: {
                     total: 0,        // 总数
                     pageIndex: 1,  // 当前位于哪页
                     pageSize: 15,   // 1页显示多少条
                     pageSizes: [5, 10, 15, 20],  //每页显示多少条
                     layout: "total, sizes, prev, pager, next, jumper"   // 翻页属性
                 },
+                form_list:{
+                    limit:15,
+                    page:1,
+                    user_name:'',
+                    lock:0,
+                }
             }
         },
         mounted() {
@@ -75,14 +81,10 @@
         },
         methods: {
             loadData() {
-                let param = {
-                    limit: this.paginations.pageSize,
-                    page: this.paginations.pageIndex
-                }
-                userList(param).then(response => {
+                userList(this.form_list).then(response => {
                     this.tableData = response.data.data.data
                     this.loading = false;
-                    this.paginations.total = response.data.data.total;
+                    this.paginate.total = response.data.data.total;
                 }).catch(function (error) {
                     // handle error
                     console.log(error);
@@ -92,12 +94,12 @@
             },
             // 每页多少条切换
             handleSizeChange(pageSize) {
-                this.paginations.pageSize = pageSize;
+                this.form_list.limit= pageSize;
                 this.loadData();
             },
             // 上下分页
             handleCurrentChange(page) {
-                this.paginations.pageIndex = page;
+                this.form_list.page= page;
                 this.loadData();
             },
             handleEdit(index, row) {

@@ -47,10 +47,11 @@ export function lockUser(data) {
     })
 }
 
-export function userList() {
+export function userList(data) {
     return request({
         url: '/main/sys/user-list',
-        method: 'get'
+        method: 'post',
+        data
     })
 }
 

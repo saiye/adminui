@@ -3,10 +3,13 @@
         <el-tab-pane label="店面列表" :inline="true"  name="list">
             <el-form :inline="true" :model="form_list" class="demo-form-inline">
                 <el-form-item >
-                    <el-input v-model="form_list.business_name" placeholder="请输入商户名称"></el-input>
+                    <el-input v-model="form_list.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
                 <el-form-item >
-                    <el-input v-model="form_list.relation_name" placeholder="请输入联系人名称"></el-input>
+                    <el-input v-model="form_list.store_name" placeholder="请输入店面名称"></el-input>
+                </el-form-item>
+                <el-form-item >
+                    <el-input v-model="form_list.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
                 <el-date-picker
                         v-model="form_list.listDate"
@@ -17,7 +20,6 @@
                         end-placeholder="请选择结束日期"
                         :default-time="['00:00:00', '23:59:59']">
                 </el-date-picker>
-
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
                 </el-form-item>
@@ -62,15 +64,18 @@
         </el-tab-pane>
         <el-tab-pane label="店面审核" name="check">
 
-            <el-form :inline="true" :model="form_list" class="demo-form-inline">
+            <el-form :inline="true" :model="form_store" class="demo-form-inline">
                 <el-form-item >
-                    <el-input v-model="form_list.business_name" placeholder="请输入商户名称"></el-input>
+                    <el-input v-model="form_store.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
                 <el-form-item >
-                    <el-input v-model="form_list.relation_name" placeholder="请输入联系人名称"></el-input>
+                    <el-input v-model="form_store.store_name" placeholder="请输入店面名称"></el-input>
+                </el-form-item>
+                <el-form-item >
+                    <el-input v-model="form_store.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
                 <el-date-picker
-                        v-model="form_list.listDate"
+                        v-model="form_store.listDate"
                         type="datetimerange"
                         align="right"
                         :picker-options="pickerOptions"
@@ -80,7 +85,7 @@
                 </el-date-picker>
 
                 <el-form-item>
-                    <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
+                    <el-button type="primary" icon="el-icon-search" @click="onSearchCheckList" round>查询</el-button>
                 </el-form-item>
             </el-form>
             <el-table
@@ -113,8 +118,8 @@
                                        :layout="CheckPaginate.layout"
                                        :total="CheckPaginate.total"
                                        :current-page='CheckPaginate.pageIndex'
-                                       @current-change='handleStoreChangePage'
-                                       @size-change='handleStoreChangeSize'>
+                                       @current-change='handleStoreCheckChangePage'
+                                       @size-change='handleStoreCheckChangeSize'>
                         </el-pagination>
                     </div>
                 </el-col>
@@ -153,18 +158,20 @@
                 checkLoading:false,
                 form_list: {
                     user_name: '',
-                    business_name: '',
-                    relation_name: '',
+                    store_name:'',
+                    company_name: '',
+                    real_name: '',
                     start_date:'',
                     end_date:'',
                     listDate:'',
                     limit:15,
                     page:1
                 },
-                check_list: {
+                form_store: {
                     user_name: '',
-                    business_name: '',
-                    relation_name: '',
+                    store_name:'',
+                    company_name: '',
+                    real_name: '',
                     start_date:'',
                     end_date:'',
                     listDate:'',
@@ -224,8 +231,8 @@
                 })
             },
             loadStoreCheckListData(){
-                this.storeCheckLoading=true;
-                storeList(this.check_list).then(response => {
+                this.checkLoading = true;
+                storeList(this.form_store).then(response => {
                     this.tableStoreCheckData = response.data.data.data;
                     this.CheckPaginate.total = response.data.data.total;
                     this.checkLoading = false;
@@ -246,20 +253,20 @@
             },
             handleStoreCheckChangePage(page){
                 this.CheckPaginate.pageIndex = page;
-                this.check_list.page=page;
+                this.form_store.page=page;
                 this.loadStoreCheckListData();
 
             },
             handleStoreCheckChangeSize(pageSize){
                 this.CheckPaginate.pageSize = pageSize;
-                this.check_list.limit=pageSize;
+                this.form_store.limit=pageSize;
                 this.loadStoreCheckListData();
             },
             onSearchList(){
-
+                this.loadStoreListData();
             },
             onSearchCheckList(){
-
+                this.loadStoreCheckListData();
             },
             handleStoreLook(index, row){
 

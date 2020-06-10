@@ -8,26 +8,19 @@ export function logError(data) {
     })
 }
 
-export function getLogList(token) {
+export function showLogData(data) {
     return request({
-        url: 'main/log/log',
+        url: '/main/log/show',
         method: 'post',
-        params: {token}
+        data
     })
 }
 
-export function actionLogList() {
+export function actionLogList(data) {
     return request({
         url: '/main/log/action-log-list',
-        method: 'post'
+        method: 'post',
+        data
     })
 }
-
-export function loginLogList() {
-    return request({
-        url: 'main/log/login-log-list',
-        method: 'post'
-    })
-}
-
 

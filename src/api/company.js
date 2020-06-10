@@ -21,6 +21,14 @@ export function checkCompany(data) {
     })
 }
 
+export function lockCompany(data) {
+    return request({
+        url: '/company/Index/lockCompany',
+        method: 'post',
+        data
+    })
+}
+
 export function getStateData() {
     return request({
         url: '/company/Index/getState',
