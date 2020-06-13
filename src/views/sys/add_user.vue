@@ -30,7 +30,7 @@
 </template>
 <script>
     import {roleList} from '@/api/role';
-    import {addUser,editUser} from '@/api/user';
+    import {addUser,editUser} from '@/api/cpuser';
 
     export default {
         data() {

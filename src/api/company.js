@@ -1,21 +1,21 @@
-import request from '../tools/request'
+import request from '@/tools/request'
 export function companyList(data) {
     return request({
-        url: '/company/Index/companyList',
+        url: '/company/index/companyList',
         method: 'post',
         data
     })
 }
 export function addCompany(data) {
     return request({
-        url: '/company/Index/addCompany',
+        url: '/company/index/addCompany',
         method: 'post',
         data
     })
 }
 export function checkCompany(data) {
     return request({
-        url: '/company/Index/checkCompany',
+        url: '/company/index/checkCompany',
         method: 'post',
         data
     })
@@ -23,7 +23,7 @@ export function checkCompany(data) {
 
 export function lockCompany(data) {
     return request({
-        url: '/company/Index/lockCompany',
+        url: '/company/index/lockCompany',
         method: 'post',
         data
     })
@@ -31,13 +31,13 @@ export function lockCompany(data) {
 
 export function getStateData() {
     return request({
-        url: '/company/Index/getState',
+        url: '/company/index/getState',
         method: 'post',
     })
 }
 export function areaList(data) {
     return request({
-        url: '/company/Index/areaList',
+        url: '/company/index/areaList',
         method: 'post',
         data
     })

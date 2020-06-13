@@ -21,7 +21,7 @@
                 :visible.sync="drawer_list.drawer"
                 :direction="drawer_list.direction"
                 :before-close="handleClose">
-            <pre>{{drawer_list.info}}</pre>
+            <pre>{{info}}</pre>
         </el-drawer>
 
     </div>
@@ -40,8 +40,8 @@
                     title:'',
                     drawer: false,
                     direction: 'rtl',
-                    info:'',
                 },
+                info:'',
                 tmp:[],
             }
         },
@@ -68,12 +68,12 @@
                 this.drawer_list.title=row.file;
                 if(!this.tmp[row.file]){
                     showLogData(this.drawer_list).then(res=>{
-                        this.drawer_list.info=res.data.content;
+                        this.info=res.data.content;
                         this.tmp[row.file]=res.data.content;
                         this.drawer_list.drawer=true;
                     });
                 }else{
-                    this.drawer_list.info=this.tmp[row.file];
+                    this.info=this.tmp[row.file];
                     this.drawer_list.drawer=true;
                 }
 

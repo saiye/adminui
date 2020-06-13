@@ -1,10 +1,10 @@
 <template>
     <el-container >
         <el-aside width="200px">
-            <el-menu
-                    :default-active="$route.name"
-                    class="el-menu-vertical-demo"
-                    active-text-color="#ffd04b">
+            <div class="left-logo">
+                <span>狼人杀总管端</span>
+            </div>
+            <el-menu :default-active="$route.name" class="el-menu-vertical-demo">
                 <el-submenu :index="item.name"  v-for="item in routes" :key="item.name">
                     <template slot="title">
                         <i class="el-icon-odometer"></i>
@@ -19,7 +19,7 @@
                     </el-menu-item-group>
                 </el-submenu>
 
-                <el-menu-item index="s.name" v-for="s in singleRoutes" :key="s.name" @click="selectMenu(s.name,'')">
+                <el-menu-item index="s.name" v-for="s in singleRoutes" :key="s.name" @click="selectMenu(s.name,'')" >
                     <i class="el-icon-odometer"></i>
                     <span slot="title">{{s.meta.title}}</span>
                 </el-menu-item>
@@ -67,7 +67,7 @@
                 }
             },
             async logout() {
-                await this.$store.dispatch('user/logout')
+                await this.$store.dispatch('cpuser/logout')
                 this.$router.push(`/login?redirect=${this.$route.fullPath}`)
             },
             userDetail() {
@@ -97,6 +97,14 @@
         margin: 0;
         padding-left:20px;
         background-color: #FFF;
+    }
+    .left-logo{
+        width:200px;
+        height:50px;
+        text-align:center;
+        line-height: 50px;
+        font-size:25px;
+        color: #0a0c2196;
     }
 </style>
 

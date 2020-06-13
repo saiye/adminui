@@ -1,8 +1,8 @@
-import request from 'utils/request'
+import request from '@/tools/request'
 
 export function staffList(data) {
     return request({
-        url: '/staff/Index/staffList',
+        url: '/staff/index/staffList',
         method: 'post',
         data
     })

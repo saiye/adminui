@@ -48,7 +48,7 @@
     </div>
 </template>
 <script>
-    import {userList, lockUser} from '@/api/user'
+    import {userList, lockUser} from '@/api/cpuser'
 
     export default {
         created() {

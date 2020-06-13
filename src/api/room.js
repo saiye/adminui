@@ -1,26 +1,28 @@
 import request from '@/tools/request'
 
-export function addUser(data) {
+export function companyAndRoomList(data) {
     return request({
-        url: '/game/index/addUser',
+        url: '/room/index/companyAndRoomList',
         method: 'post',
         data
     })
 }
 
-export function lockUser(data) {
+export function addRoom(data) {
     return request({
-        url: '/game/index/lockUser',
+        url: '/room/index/addRoom',
         method: 'post',
         data
     })
 }
 
-export function userList(data) {
+
+export function roomList(data) {
     return request({
-        url: '/game/index/userList',
+        url: '/room/index/roomList',
         method: 'post',
         data
     })
 }
+
 

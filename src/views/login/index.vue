@@ -77,7 +77,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$store.dispatch('user/login', this.form).then(() => {
+                        this.$store.dispatch('cpuser/login', this.form).then(() => {
                             this.$router.push({path: this.redirect || '/'})
                         }).catch((e) => {
                             console.log('login success 22!!');

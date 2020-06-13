@@ -164,7 +164,24 @@ export const constantRoutes = [
                 component: () => import('./views/member/list'),
                 hidden: false,
                 meta: {title: '房间管理', icon: 'example'},
-            },
+            }
+        ]
+    },
+    {
+        path: '/billing',
+        component: Layout,
+        name: 'billing-list',
+        hidden:false,
+        redirect: '/billing/list',
+        meta: {title: '计费设置', icon: 'example'},
+        children: [
+            {
+                path: 'list',
+                name: 'billing-list',
+                component: () => import('./views//billing/list'),
+                hidden: false,
+                meta: {title: '计费设置', icon: 'example'}
+            }
         ]
     },
     {path: '*', redirect: '/404', name: 'alias-404',hidden: true}

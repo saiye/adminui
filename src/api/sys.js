@@ -1,4 +1,4 @@
-import request from 'utils/request'
+import request from '@/tools/request'
 
 export function addRole(data) {
     return request({

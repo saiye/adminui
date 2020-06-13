@@ -33,11 +33,10 @@ service.interceptors.response.use(
 
     response => {
         const res = response.data
-        // if the custom code is not 20000, it is judged as an error.
-        if (res.code!==1) {
+        if (res.message||res.code!==1) {
             let type='error';
             switch(res.code){
-                case 3:
+                case 1:
                     type='success';
                     break;
             }
@@ -46,6 +45,9 @@ service.interceptors.response.use(
                 type: type,
                 duration: 5 * 1000
             })
+        }
+        // if the custom code is not 20000, it is judged as an error.
+        if (res.code!==1) {
             // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
             if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
                 // to re-login
@@ -54,13 +56,14 @@ service.interceptors.response.use(
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    store.dispatch('user/resetToken').then(() => {
+                    store.dispatch('cpuser/resetToken').then(() => {
                         location.reload()
                     })
                 }).catch(err=>{
                     console.log(err);
                 })
             }
+          return   Promise.reject(new Error(res.message || 'Error'))
         }
         return res;
     },
