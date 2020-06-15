@@ -15,7 +15,13 @@ export function addRoom(data) {
         data
     })
 }
-
+export function editRoom(data) {
+    return request({
+        url: '/room/index/editRoom',
+        method: 'post',
+        data
+    })
+}
 
 export function roomList(data) {
     return request({
