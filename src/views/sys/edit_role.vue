@@ -51,7 +51,7 @@
 </template>
 <script>
     import {getRoleItem,editRole} from '@/api/role'
-    import {Message} from 'element-ui'
+
 
     export default {
         data() {
@@ -109,19 +109,9 @@
                     'role_id':this.role_id,
                     'act':this.checkedRole,
                 }).then(response => {
-                    Message({
-                        message: response.message || 'Error',
-                        type: 'success',
-                        duration: 5 * 1000
-                    })
-                    console.log('---response---');
-                    console.log(response);
+
                 }).catch(function (error) {
-                    Message({
-                        message: error,
-                        type: 'success',
-                        duration: 5 * 1000
-                    })
+
                 }).then(function () {
                     console.log('do onSubmit');
                 })

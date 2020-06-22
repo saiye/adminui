@@ -8,6 +8,14 @@ export function addUser(data) {
     })
 }
 
+export function editUser(data) {
+    return request({
+        url: '/game/index/editUser',
+        method: 'post',
+        data
+    })
+}
+
 export function lockUser(data) {
     return request({
         url: '/game/index/lockUser',

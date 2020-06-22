@@ -10,7 +10,7 @@
             >添加商户</el-button>
         </el-col>
     </el-row>
-    <el-dialog title="添加商户" :visible.sync="dialogVisible" width="700px">
+    <el-dialog title="添加商户" :close-on-click-modal="closeModal"  :visible.sync="dialogVisible" width="700px">
         <div class="add-dialog-box">
             <el-form ref="form" :model="dialog_form" label-width="80px">
                 <el-form-item label="商户名称">
@@ -88,6 +88,7 @@
         data() {
             return {
                 dialogVisible: false,
+                closeModal:false,
                 dialogImageUrl: '',
                 dialogImgVisible:false,
                 visibleDialog:this.visible,

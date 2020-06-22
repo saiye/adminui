@@ -106,5 +106,27 @@
         font-size:25px;
         color: #0a0c2196;
     }
+    @media screen and (min-width:100px) {
+        .el-dialog{
+            width:90%;
+        }
+    }
+    @media screen and (min-width:500px) {
+        .el-dialog{
+            width:80%;
+        }
+    }
+    @media screen and (min-width: 800px) {
+        .el-dialog{
+            width:80%;
+        }
+    }
+    @media screen and (min-width:1000px) {
+
+        .el-dialog{
+            width:40%;
+        }
+    }
+
 </style>
 

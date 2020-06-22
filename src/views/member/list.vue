@@ -14,7 +14,18 @@
                     </el-row>
                 </el-form-item>
             </el-form>
-            <add_user v-on:success="loadUserListData"></add_user>
+            <el-row>
+                <el-col :span="24">
+                    <el-button
+                            size="mini"
+                            style="float: right;margin-right: 20px;margin-bottom: 10px;"
+                            @click="openAddUserDialog"
+                            round
+                    >新增会员
+                    </el-button>
+                </el-col>
+            </el-row>
+            <add_user v-on:handelConfirm="handleDialogConfirm"  v-on:handelCance="handleDialogCance" v-bind:visible="visible"  v-bind:user="user"></add_user>
             <el-table
                     v-loading="ListLoading"
                     :data="tableListData"
@@ -22,23 +33,29 @@
                     stripe
                     highlight-current-row
                     header-cell-class-name="table-header-class"
+                    :row-class-name="tableRowClassName"
                     style="width:100%">
                 <el-table-column prop="id" label="序号" ></el-table-column>
                 <el-table-column prop="account" label="会员账号"></el-table-column>
-                <el-table-column prop="judge" label="是否为法官"></el-table-column>
+                <el-table-column  label="是否为法官">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.judge==1?'是':'否'}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="nickname" label="昵称"></el-table-column>
                 <el-table-column prop="real_name" label="真实姓名"></el-table-column>
                 <el-table-column prop="email" label="邮箱地址"></el-table-column>
                 <el-table-column prop="created_at" label="注册日期"></el-table-column>
-                <el-table-column prop="lock" label="账号状态"></el-table-column>
+                <el-table-column prop="lock" label="账号状态">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.lock==1?'正常':'锁定'}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column align="right" label="操作">
                     <template slot-scope="scope">
-                        <el-button size="mini"   type="danger" @click="handleLock(2, scope.row)" round>
-                            禁封
-                        </el-button>
-                        <el-button size="mini"  type="success" @click="handleLock(1, scope.row)" round>
-                            解封
-                        </el-button>
+                        <span><el-button size="mini" type="primary"  @click="handleEdit(scope.row)" round>编辑</el-button></span>
+                       <span> <el-button size="mini"  type="danger" @click="handleLock(2, scope.row)" round>禁封</el-button></span>
+                      <span><el-button size="mini"  type="success" @click="handleLock(1, scope.row)" round>解封</el-button></span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -61,6 +78,14 @@
         </el-tab-pane>
     </el-tabs>
 </template>
+<style>
+    .el-table .warning-row {
+        background:#f3dfdf;
+    }
+    .el-table .success-row {
+        background: #f0f9eb;
+    }
+</style>
 <script>
     import {userList,lockUser} from '@/api/user';
     import  add_user from '@/components/users/add_user';
@@ -73,6 +98,18 @@
                 activeName: 'list',
                 tableListData: [],
                 ListLoading:false,
+                visible:false,
+                user: {
+                    id: "",
+                    account: "",
+                    password: "",
+                    affirm_password: "",
+                    real_name: "",
+                    nickname: "",
+                    email: "",
+                    sex:0,
+                    judge:2,
+                },
                 Paginate: {
                     total:0,        // 总数
                     pageIndex: 1,  // 当前位于哪页
@@ -91,6 +128,13 @@
             this.loadUserListData();
         },
         methods: {
+            tableRowClassName({row, rowIndex}) {
+                if (row.lock==2) {
+                    return 'warning-row';
+                } else {
+                    return 'success-row';
+                }
+            },
             handleLock(lock,row){
                 lockUser({
                     'user_id':row.id,
@@ -102,6 +146,21 @@
                     })
                     .then(function() {
                     });
+            },
+            openAddUserDialog(){
+                this.visible=true;
+                this.user.id='';
+            },
+            handleEdit(row){
+                console.log('edit--props')
+                this.visible=true;
+                this.user=row;
+            },
+            handleDialogConfirm(){
+                this.visible=false;
+            },
+            handleDialogCance(){
+                this.visible=false;
             },
             handleClick(tab, event) {
                 console.log(tab.name);

@@ -184,6 +184,40 @@ export const constantRoutes = [
             }
         ]
     },
+    {
+        path: '/game',
+        component: Layout,
+        name: 'channel-list',
+        hidden:false,
+        redirect: '/game/channel',
+        meta: {title: '渠道管理', icon: 'example'},
+        children: [
+            {
+                path: 'channel',
+                name: 'channel-list',
+                component: () => import('./views//channel/list'),
+                hidden: false,
+                meta: {title: '渠道列表', icon: 'example'}
+            }
+        ]
+    },
+    {
+        path: '/board',
+        component: Layout,
+        name: 'board-list',
+        hidden:false,
+        redirect: '/board/list',
+        meta: {title: '板子管理', icon: 'example'},
+        children: [
+            {
+                path: 'list',
+                name: 'board-list',
+                component: () => import('./views/board/list'),
+                hidden: false,
+                meta: {title: '板子列表', icon: 'example'}
+            }
+        ]
+    },
     {path: '*', redirect: '/404', name: 'alias-404',hidden: true}
 ]
 

@@ -1,14 +1,14 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
-        <el-tab-pane label="店面列表" :inline="true"  name="list">
+        <el-tab-pane label="店面列表" :inline="true" name="list">
             <el-form :inline="true" :model="form_list" class="demo-form-inline">
-                <el-form-item >
+                <el-form-item>
                     <el-input v-model="form_list.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
-                <el-form-item >
+                <el-form-item>
                     <el-input v-model="form_list.store_name" placeholder="请输入店面名称"></el-input>
                 </el-form-item>
-                <el-form-item >
+                <el-form-item>
                     <el-input v-model="form_list.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
                 <el-date-picker
@@ -39,7 +39,7 @@
                 <el-table-column prop="created_at" width="100" label="注册日期"></el-table-column>
                 <el-table-column label="地区">
                     <template slot-scope="scope">
-                      <span>{{scope.row.province.area_name}}/{{scope.row.city.area_name}}/{{scope.row.region.area_name}}</span>
+                        <span>{{scope.row.province.area_name}}/{{scope.row.city.area_name}}/{{scope.row.region.area_name}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column prop="staff.real_name" width="100" label="联系人"></el-table-column>
@@ -49,12 +49,12 @@
                 <el-col :span="24">
                     <div class="pagination">
                         <el-pagination background
-                                       v-if='StorePaginate.total > 0'
-                                       :page-sizes="StorePaginate.pageSizes"
-                                       :page-size="StorePaginate.pageSize"
-                                       :layout="StorePaginate.layout"
-                                       :total="StorePaginate.total"
-                                       :current-page='StorePaginate.pageIndex'
+                                       v-if='ListPaginate.total > 0'
+                                       :page-sizes="ListPaginate.pageSizes"
+                                       :page-size="ListPaginate.pageSize"
+                                       :layout="ListPaginate.layout"
+                                       :total="ListPaginate.total"
+                                       :current-page='ListPaginate.pageIndex'
                                        @current-change='handleStoreChangePage'
                                        @size-change='handleStoreChangeSize'>
                         </el-pagination>
@@ -64,18 +64,18 @@
         </el-tab-pane>
         <el-tab-pane label="店面审核" name="check">
 
-            <el-form :inline="true" :model="form_store" class="demo-form-inline">
-                <el-form-item >
-                    <el-input v-model="form_store.company_name" placeholder="请输入商户名称"></el-input>
+            <el-form :inline="true" :model="form_check" class="demo-form-inline">
+                <el-form-item>
+                    <el-input v-model="form_check.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
-                <el-form-item >
-                    <el-input v-model="form_store.store_name" placeholder="请输入店面名称"></el-input>
+                <el-form-item>
+                    <el-input v-model="form_check.store_name" placeholder="请输入店面名称"></el-input>
                 </el-form-item>
-                <el-form-item >
-                    <el-input v-model="form_store.real_name" placeholder="请输入联系人名称"></el-input>
+                <el-form-item>
+                    <el-input v-model="form_check.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
                 <el-date-picker
-                        v-model="form_store.listDate"
+                        v-model="form_check.listDate"
                         type="datetimerange"
                         align="right"
                         :picker-options="pickerOptions"
@@ -107,6 +107,14 @@
                 </el-table-column>
                 <el-table-column prop="staff.real_name" width="100" label="联系人"></el-table-column>
                 <el-table-column prop="staff.phone" label="联系电话"></el-table-column>
+                <el-table-column prop="reason" label="拒绝原因"></el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini" type="primary" @click="handleCheckStore(1,scope.row)" round>通过
+                        </el-button>
+                        <el-button size="mini" type="danger" @click="handleCheckStore(2,scope.row)" round>拒绝</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <el-row>
                 <el-col :span="24">
@@ -124,59 +132,95 @@
                     </div>
                 </el-col>
             </el-row>
+            <el-dialog
+                    title="拒绝原因"
+                    :visible.sync="dialogRejectVisible"
+                    width="50%"
+                    :before-close="handleDialogRejectClose">
+                <el-form :model="rejectMessage" ref="reject_form" :rules="rejectRules" label-width="100px">
 
+                    <el-form-item label="拒绝原因" prop="reason">
+                        <el-input
+                                type="textarea"
+                                :rows="2"
+                                placeholder="请输入内容"
+                                v-model="rejectMessage.reason">
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogRejectVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="doRejectCheck('reject_form')">确 定</el-button>
+                </span>
+            </el-dialog>
         </el-tab-pane>
     </el-tabs>
 </template>
 <script>
     import add_store from '@/components/store/add_store';
-    import {storeList} from '@/api/store';
+    import {storeList, checkStore} from '@/api/store';
+
     export default {
-        components:{
+        components: {
             add_store
         },
         data() {
             return {
                 activeName: 'list',
                 tableStoreData: [],
+                dialogRejectVisible: false,
                 tableStoreCheckData: [],
-                StorePaginate: {
-                    total:0,        // 总数
+                ListPaginate: {
+                    total: 0,        // 总数
                     pageIndex: 1,  // 当前位于哪页
-                    pageSize:15,   // 1页显示多少条
+                    pageSize: 15,   // 1页显示多少条
                     pageSizes: [5, 10, 15, 20],  //每页显示多少条
                     layout: "total, sizes, prev, pager, next, jumper"   // 翻页属性
+                },
+                rejectMessage: {
+                    check: '',
+                    store_id: '',
+                    reason: '',
+                },
+                rejectRules: {
+                    reason: [
+                        {required: true, message: '请输入拒绝原因最长100位', trigger: 'blur'},
+                        {min: 1, max: 100, message: '长度在 1 到 100个字符', trigger: 'blur'}
+                    ],
                 },
                 CheckPaginate: {
-                    total:0,        // 总数
+                    total: 0,        // 总数
                     pageIndex: 1,  // 当前位于哪页
-                    pageSize:15,   // 1页显示多少条
+                    pageSize: 15,   // 1页显示多少条
                     pageSizes: [5, 10, 15, 20],  //每页显示多少条
                     layout: "total, sizes, prev, pager, next, jumper"   // 翻页属性
                 },
-                storeLoading:false,
-                checkLoading:false,
+                storeLoading: false,
+                checkLoading: false,
                 form_list: {
                     user_name: '',
-                    store_name:'',
+                    store_name: '',
                     company_name: '',
                     real_name: '',
-                    start_date:'',
-                    end_date:'',
-                    listDate:'',
-                    limit:15,
-                    page:1
+                    start_date: '',
+                    end_date: '',
+                    listDate: '',
+                    check: [1],
+                    limit: 15,
+                    page: 1
                 },
-                form_store: {
+                form_check: {
                     user_name: '',
-                    store_name:'',
+                    store_name: '',
                     company_name: '',
                     real_name: '',
-                    start_date:'',
-                    end_date:'',
-                    listDate:'',
-                    limit:15,
-                    page:1
+                    start_date: '',
+                    end_date: '',
+                    listDate: '',
+                    check: [0, 2],
+                    limit: 15,
+                    page: 1
                 },
                 pickerOptions: {
                     shortcuts: [{
@@ -213,64 +257,95 @@
         },
         methods: {
             handleTabClick(tab, event) {
-                if(tab.name=='list'){
+                if (tab.name == 'list') {
                     this.loadStoreListData();
-                }else{
+                } else {
                     this.loadStoreCheckListData();
                 }
             },
-            loadStoreListData(){
-              this.storeLoading=true;
-              storeList(this.form_list).then(response => {
+            loadStoreListData() {
+                this.storeLoading = true;
+                storeList(this.form_list).then(response => {
                     this.tableStoreData = response.data.data.data;
-                    this.StorePaginate.total = response.data.data.total;
+                    this.ListPaginate.total = response.data.data.total;
                     this.storeLoading = false;
                 })
-                .catch(function(error) {
-                    console.log(error);
-                })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
             },
-            loadStoreCheckListData(){
+            loadStoreCheckListData() {
                 this.checkLoading = true;
-                storeList(this.form_store).then(response => {
+                storeList(this.form_check).then(response => {
                     this.tableStoreCheckData = response.data.data.data;
                     this.CheckPaginate.total = response.data.data.total;
                     this.checkLoading = false;
-                }).catch(function(error) {
-                        console.log(error);
+                }).catch(function (error) {
+                    console.log(error);
                 })
             },
-            handleStoreChangePage(page){
-                this.StorePaginate.pageIndex = page;
-                this.form_list.page=page;
+            handleStoreChangePage(page) {
+                this.ListPaginate.pageIndex = page;
+                this.form_list.page = page;
                 this.loadStoreListData();
 
             },
-            handleStoreChangeSize(pageSize){
-                this.StorePaginate.pageSize = pageSize;
-                this.form_list.limit=pageSize;
+            handleStoreChangeSize(pageSize) {
+                this.ListPaginate.pageSize = pageSize;
+                this.form_list.limit = pageSize;
                 this.loadStoreListData();
             },
-            handleStoreCheckChangePage(page){
+            handleStoreCheckChangePage(page) {
                 this.CheckPaginate.pageIndex = page;
-                this.form_store.page=page;
+                this.form_check.page = page;
                 this.loadStoreCheckListData();
 
             },
-            handleStoreCheckChangeSize(pageSize){
+            handleStoreCheckChangeSize(pageSize) {
                 this.CheckPaginate.pageSize = pageSize;
-                this.form_store.limit=pageSize;
+                this.form_check.limit = pageSize;
                 this.loadStoreCheckListData();
             },
-            onSearchList(){
+            onSearchList() {
                 this.loadStoreListData();
             },
-            onSearchCheckList(){
+            onSearchCheckList() {
                 this.loadStoreCheckListData();
             },
-            handleStoreLook(index, row){
+            handleCheckStore(check, row) {
+                this.rejectMessage.check = check;
+                this.rejectMessage.store_id = row.store_id;
+                if (check == 2) {
+                    this.dialogRejectVisible = true;
+                } else {
+                    checkStore(this.rejectMessage).then(response => {
+                        this.dialogRejectVisible = false
+                        this.loadStoreCheckListData();
+                    }).catch(function (error) {
+                        console.log(error);
+                    }).then(function () {
+                    });
+                }
+            },
+            handleDialogRejectClose() {
+                console.log(11)
+            },
+            doRejectCheck(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        checkStore(this.rejectMessage).then(response => {
+                            this.dialogRejectVisible = false
+                            this.loadStoreCheckListData();
+                        }).catch(function (error) {
+                            console.log(error);
+                        }).then(function () {
+                        });
+                    } else {
+                        return false;
+                    }
+                });
 
-            }
+            },
         }
     };
 </script>

@@ -11,22 +11,22 @@
                 </el-button>
             </el-col>
         </el-row>
-        <el-dialog title="添加店面" :visible.sync="dialogVisible" width="700px">
+        <el-dialog title="添加店面" :close-on-click-modal="closeModal"  :visible.sync="dialogVisible" width="700px">
             <div class="add-dialog-box">
-                <el-form ref="form" :model="dialog_form" label-width="100px">
-                    <el-form-item label="店面名称">
+                <el-form :model="dialog_form"  ref="dialog_form" :rules="rules" label-width="100px">
+                    <el-form-item label="店面名称" prop="store_name">
                         <el-input v-model="dialog_form.store_name"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="所在区域">
+                    <el-form-item label="所在区域" prop="area">
                         <el-cascader placeholder="选择所在区域" v-model=dialog_form.area :props="areaListData" clearable ></el-cascader>
                     </el-form-item>
 
-                    <el-form-item label="店面地址">
+                    <el-form-item label="店面地址"  prop="address">
                         <el-input v-model="dialog_form.address"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="所属商户">
+                    <el-form-item label="所属商户"  prop="company_id">
                     <el-select
                                 v-model="dialog_form.company_id"
                                 filterable
@@ -46,7 +46,7 @@
 
                     <el-form-item label="店面照片">
                         <el-upload
-                                action="https://jsonplaceholder.typicode.com/posts/"
+                                action=""
                                 list-type="picture-card"
                                 :on-preview="handlePictureCardPreview"
                                 :on-remove="handleRemove"
@@ -54,7 +54,8 @@
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <el-dialog
-                                width="30%"
+                                action=""
+                                width="60%"
                                 title="店面-原图"
                                 :visible.sync="dialogImgVisible"
                                 append-to-body
@@ -63,7 +64,7 @@
                         </el-dialog>
                     </el-form-item>
 
-                    <el-form-item label="联系人姓名">
+                    <el-form-item label="联系人姓名" prop="real_name">
                         <el-input v-model="dialog_form.real_name">
                             <template slot="append">
                                 <el-radio v-model="dialog_form.sex" label="1">男</el-radio>
@@ -71,20 +72,20 @@
                             </template>
                         </el-input>
                     </el-form-item>
-                    <el-form-item label="手机号码">
+                    <el-form-item label="手机号码" prop="phone">
                         <el-input v-model="dialog_form.phone">
                             <template slot="prepend">+86中国大陆</template>
                         </el-input>
                     </el-form-item>
 
-                    <el-form-item label="账号">
+                    <el-form-item label="账号" prop="account">
                         <el-input v-model="dialog_form.account"></el-input>
                     </el-form-item>
-                    <el-form-item label="密码">
+                    <el-form-item label="密码" prop="password">
                         <el-input v-model="dialog_form.password" show-password></el-input>
                     </el-form-item>
 
-                    <el-form-item label="店面描述">
+                    <el-form-item label="店面描述" prop="describe">
                         <el-input v-model="dialog_form.describe"  type="textarea"
                                   :rows="2"
                                   placeholder="请输入描述"></el-input>
@@ -94,22 +95,22 @@
             </div>
             <span slot="footer" class="dialog-footer">
           <el-button @click="storeDialogCance">取 消</el-button>
-          <el-button type="primary" @click="storeDialogConfirm">确 定</el-button>
+          <el-button type="primary" @click="storeDialogConfirm('dialog_form')">确 定</el-button>
         </span>
         </el-dialog>
     </div>
 </template>
 <script>
     import {areaList,companyList} from "@/api/company";
-
-    import {addStore,storeList} from "@/api/store";
-
+    import {addStore} from "@/api/store";
+    import {uploadImage,deleteImage} from "@/api/tool";
     export default {
         'name': 'add_store',
         props: ['state'],
         data() {
             return {
                 dialogVisible: false,
+                closeModal: false,
                 loading: false,
                 companyListData: [],
                 dialogImageUrl: '',
@@ -122,11 +123,50 @@
                     address: "",
                     real_name: "",
                     phone: "",
-                    proportion: 100,
                     account: "",
                     password: "",
                     sex:'1',
                     area:[],
+                },
+                rules: {
+                    describe: [
+                        {required: true, message: '请输入店面描述最长100位', trigger: 'blur'},
+                        {min: 1, max: 100, message: '长度在 1 到 100个字符', trigger: 'blur'}
+                    ],
+                    store_name: [
+                        {required: true, message: '请输入店面名称最长30位', trigger: 'blur'},
+                        {min: 1, max:30, message: '长度在 1 到 30个字符', trigger: 'blur'}
+                    ],
+                    company_id: [
+                        {required: true, message: '请选择商户',trigger: 'change'},
+                        {type: 'number', message: '商户id错误'}
+                    ],
+                    address: [
+                        {required: true, message: '请选择填写店面地址最长100位',trigger: 'blur'},
+                        {min: 1, max:100, message: '长度在 1 到 100个字符', trigger: 'blur'}
+                    ],
+                    real_name: [
+                        {required: true, message: '请选择填写真实姓名最长20位',trigger:'blur'},
+                        {min: 1, max:100, message: '长度在 1 到 20个字符', trigger: 'blur'}
+                    ],
+                    phone: [
+                        {required: true, message: '请选择填手机号码最长11位',trigger: 'blur'},
+                         {min: 11, max:11, message: '长度在 11个字符', trigger: 'blur'}
+                    ],
+                    account: [
+                        {required: true, message: '请输入账号1-20字符', trigger: 'blur'},
+                        {min: 1, max:20, message: '长度在 1 到 20个字符', trigger: 'blur'}
+                    ],
+                    password: [
+                        {required: true, message: '请输入密码1-20字符', trigger: 'blur'},
+                        {min: 1, max:20, message: '长度在 1 到 20个字符', trigger: 'blur'}
+                    ],
+                    sex: [
+                        {required: true, message: '请选择性别',trigger: 'change'},
+                    ],
+                    area: [
+                        {required: true, message: '请选择店面地区',trigger: 'change'},
+                    ]
                 },
                 areaListData: {
                     lazy: true,
@@ -148,22 +188,26 @@
         },
         methods: {
             storeDialogCance() {
-
                 this.dialogVisible = false;
             },
-            storeDialogConfirm() {
-                //addStore,storeList
-                addStore(this.dialog_form)
-                    .then(response => {
-                        this.dialogVisible = false;
-                        //回调父组件，刷新页面
-                       this.$emit('success');
-                    }).catch(function (error) {
-                        console.log(error);
-                    })
-                    .then(function () {
-                        console.log("add role onSubmit");
-                    });
+            storeDialogConfirm(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        addStore(this.dialog_form)
+                            .then(response => {
+                                this.dialogVisible = false;
+                                //回调父组件，刷新页面
+                                this.$emit('success');
+                            }).catch(function (error) {
+                            console.log(error);
+                        }).then(function () {
+                                console.log("onSubmit");
+                            });
+                    } else {
+                        return false;
+                    }
+                });
+
             },
             handleRemove(file, fileList) {
                 console.log(file, fileList);
@@ -171,6 +215,9 @@
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
                 this.dialogImgVisible = true;
+            },
+            doUploadImage(){
+              //uploadImage,deleteImage
             },
             remoteCompanyList(query){
                 this.loading = true;

@@ -11,11 +11,11 @@
                 </el-button>
             </el-col>
         </el-row>
-        <el-dialog title="新增计费模式" :visible.sync="dialogVisible" width="700px">
+        <el-dialog title="新增计费模式"  :close-on-click-modal="closeModal"  :visible.sync="dialogVisible" >
             <div class="add-dialog-box">
                 <el-form :model="dialog_form" ref="dialog_form" :rules="rules" label-width="100px">
 
-                    <el-form-item label="所属门店">
+                    <el-form-item label="所属门店" prop="storeArr">
                         <el-cascader placeholder="选择所在区域" v-model=dialog_form.storeArr :props="storeListData" clearable ></el-cascader>
                     </el-form-item>
 
@@ -75,6 +75,7 @@
         ],
         data() {
             return {
+                closeModal: false,
                 dialogVisible: false,
                 loading: false,
                 UserListData: [],
@@ -121,10 +122,14 @@
                         {required: true, message: '请选择货币类型', trigger: 'change'},
                         {type: 'number', message: '必须数值类型'}
                     ],
+                    storeArr: [
+                        {required: true, message: '请选择门店', trigger: 'change'},
+                    ],
                     time_unit: [
                         {required: true, message: '请输入单位数值', trigger: 'blur'},
                         {type: 'number', message: '你输入的必须是数字,不能为0'}
                     ],
+
                 }
             };
         },

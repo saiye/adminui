@@ -11,7 +11,6 @@
 </template>
 <script>
     import {addRole} from '@/api/role'
-    import {Message} from 'element-ui'
     export default {
         data() {
             return {
@@ -23,11 +22,7 @@
                 addRole({
                     role_name:this.role_name,
                 }).then(function (response) {
-                    Message({
-                        message: response.message || 'Error',
-                        type: 'success',
-                        duration: 5 * 1000
-                    })
+
                 }).catch(function (error) {
                         // handle error
                         console.log(error);

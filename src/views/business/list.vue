@@ -87,19 +87,26 @@
             <el-dialog
                     title="拒绝原因"
                     :visible.sync="dialogRejectVisible"
-                    width="30%"
+                    width="50%"
                     :before-close="handleDialogRejectClose">
-                <el-input
-                        type="textarea"
-                        :rows="2"
-                        placeholder="请输入内容"
-                        v-model="rejectMessage.reason">
-                </el-input>
+                <el-form :model="rejectMessage"  ref="reject_form" :rules="rejectRules" label-width="100px">
+
+                    <el-form-item label="拒绝原因" prop="reason">
+                        <el-input
+                                type="textarea"
+                                :rows="2"
+                                placeholder="请输入内容"
+                                v-model="rejectMessage.reason">
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+
                 <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogRejectVisible = false">取 消</el-button>
-        <el-button type="primary" @click="doRejectCheck">确 定</el-button>
-        </span>
+                    <el-button @click="dialogRejectVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="doRejectCheck('reject_form')">确 定</el-button>
+                </span>
             </el-dialog>
+
             <el-form :inline="true" :model="check_list" class="demo-form-inline">
                 <el-form-item>
                     <el-input v-model="check_list.company_name" placeholder="请输入商户名称"></el-input>
@@ -212,6 +219,12 @@
                     check: '',
                     company_id: '',
                     reason: '',
+                },
+                rejectRules:{
+                    reason: [
+                        {required: true, message: '请输入拒绝原因最长100位', trigger: 'blur'},
+                        {min: 1, max: 100, message: '长度在 1 到 100个字符', trigger: 'blur'}
+                    ],
                 },
                 BusinessPaginate: {
                     total: 0, // 总数
@@ -397,13 +410,19 @@
                 this.rejectMessage.check = 2;
                 this.rejectMessage.company_id = row.company_id;
             },
-            doRejectCheck() {
-                checkCompany(this.rejectMessage).then(response => {
-                    this.dialogRejectVisible = false
-                    this.loadBusinessListData();
-                }).catch(function (error) {
-                    console.log(error);
-                }).then(function () {
+            doRejectCheck(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        checkCompany(this.rejectMessage).then(response => {
+                            this.dialogRejectVisible = false
+                            this.loadBusinessListData();
+                        }).catch(function (error) {
+                            console.log(error);
+                        }).then(function () {
+                        });
+                    } else {
+                        return false;
+                    }
                 });
             },
             lockCompany(lock, row) {
@@ -423,9 +442,5 @@
     };
 </script>
 
-<style>
-    .add-dialog-box {
-        width: 600px;
-    }
-</style>
+
 
