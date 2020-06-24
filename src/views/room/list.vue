@@ -268,7 +268,7 @@
                     describe: '',
                     devices: [],
                     billing_id: '',
-                    storeArr: [],
+                    storeArr: [0,0],
                     delDevicesIds:[],
                 },
                 rules: {
@@ -430,6 +430,10 @@
                                 device_id:this.deviceItem.device_id,
                                 device_name:this.deviceItem.device_name,
                             });
+                            this.dialog_form.devices.sort(function(a,b){
+                                return a.seat_num - b.seat_num
+                            })
+
                             this.deviceItem.seat_num+=1;
                             this.deviceItem.device_name='设备'+this.deviceItem.seat_num;
                         }else{

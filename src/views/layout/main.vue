@@ -108,23 +108,27 @@
     }
     @media screen and (min-width:100px) {
         .el-dialog{
-            width:90%;
+            width:98%;
         }
     }
     @media screen and (min-width:500px) {
         .el-dialog{
-            width:80%;
+            width:98%;
         }
     }
     @media screen and (min-width: 800px) {
         .el-dialog{
+            width:90%;
+        }
+    }
+    @media screen and (min-width:1200px) {
+        .el-dialog{
             width:80%;
         }
     }
-    @media screen and (min-width:1000px) {
-
+    @media screen and (min-width:1210px) {
         .el-dialog{
-            width:40%;
+            width:50%;
         }
     }
 
