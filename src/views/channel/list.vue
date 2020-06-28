@@ -30,7 +30,7 @@
                     style="width:100%">
                 <el-table-column prop="channel_id" label="渠道id"></el-table-column>
                 <el-table-column prop="channel_name" label="渠道名称"></el-table-column>
-                <el-table-column prop="gameSerAddr" label="游戏服地址"></el-table-column>
+                <el-table-column prop="gameSrvAddr" label="游戏服地址"></el-table-column>
                 <el-table-column prop="loginCallBackAddr" label="登录回调地址"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
@@ -62,8 +62,8 @@
                         <el-input v-model="dialog_form.channel_name" placeholder="请输入渠道名字最长30位"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="游戏服地址" prop="gameSerAddr">
-                        <el-input v-model="dialog_form.gameSerAddr" placeholder="请输入游戏服地址"></el-input>
+                    <el-form-item label="游戏服地址" prop="gameSrvAddr">
+                        <el-input v-model="dialog_form.gameSrvAddr" placeholder="请输入游戏服地址"></el-input>
                     </el-form-item>
                     <el-form-item label="登录回调地址" prop="loginCallBackAddr">
                         <el-input v-model="dialog_form.loginCallBackAddr" placeholder="请输入登录回调地址"></el-input>
@@ -125,7 +125,7 @@
                 },
                 dialogVisible: false,
                 dialog_form: {
-                    gameSerAddr: '',
+                    gameSrvAddr: '',
                     loginCallBackAddr: '',
                     channel_id: '',
                     channel_name: "",
@@ -135,7 +135,7 @@
                         {required:true, message: '请输入渠道名称最长30位', trigger: 'blur'},
                         {min:1,max:30, message: '长度在 1 到 30个字符', trigger: 'blur'}
                     ],
-                    gameSerAddr: [
+                    gameSrvAddr: [
                         {validator: gameSerAddrCheck, trigger: 'blur'}
                     ],
                     loginCallBackAddr: [
@@ -210,13 +210,13 @@
             },
             handleEditChannel(row) {
                 this.dialogVisible = true
-                this.dialog_form.gameSerAddr =row.gameSerAddr;
+                this.dialog_form.gameSrvAddr =row.gameSrvAddr;
                 this.dialog_form.loginCallBackAddr =row.loginCallBackAddr;
                 this.dialog_form.channel_id=row.channel_id;
                 this.dialog_form.channel_name=row.channel_name;
             },
             handleAddChannel() {
-                this.dialog_form.gameSerAddr ='';
+                this.dialog_form.gameSrvAddr ='';
                 this.dialog_form.loginCallBackAddr = '';
                 this.dialog_form.channel_id='';
                 this.dialog_form.channel_name='';
