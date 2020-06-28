@@ -128,7 +128,7 @@
     }
     @media screen and (min-width:1210px) {
         .el-dialog{
-            width:50%;
+            width:60%;
         }
     }
 
