@@ -7,14 +7,15 @@ module.exports = {
         hotOnly: false, //热更新（webpack已实现了，这里false即可）
         proxy: {
             //配置跨域
-            '/api': {
+            '/admin': {
                 target: "http://www.bs.com",
                 changeOrigin: true, // needed for virtual hosted sites
                 ws: true, // proxy websockets
                 pathRewrite:{
-                    '^/api':''
+                    '^/admin':'/admin'
                 }
             }
         }
-    }
+    },
+    publicPath: './'
 }
