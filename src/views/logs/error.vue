@@ -15,6 +15,20 @@
             </el-table-column>
         </el-table>
 
+
+
+        <el-dialog
+                :title=drawer_list.title
+                :visible.sync="dialogVisible"
+                width="30%"
+                :before-close="handleClose">
+            <span>{{drawer_list.title}}</span>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="handleClose">取 消</el-button>
+            <el-button type="primary" @click="handleClose">确 定</el-button>
+          </span>
+        </el-dialog>
+
         <el-drawer
                 size="80%"
                 :title="drawer_list.title"

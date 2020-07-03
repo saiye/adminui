@@ -58,6 +58,9 @@
             <el-dialog :title=title :close-on-click-modal="closeModal" :visible.sync="dialogVisible" width="300px;">
 
                 <el-form :model="dialog_form" ref="dialog_form" :rules="rules" label-width="100px">
+                    <el-form-item label="渠道id" prop="channel_id">
+                        <el-input v-model="dialog_form.channel_id" placeholder="请输入渠道id"></el-input>
+                    </el-form-item>
                     <el-form-item label="渠道名称" prop="channel_name">
                         <el-input v-model="dialog_form.channel_name" placeholder="请输入渠道名字最长30位"></el-input>
                     </el-form-item>
@@ -81,7 +84,7 @@
     </el-tabs>
 </template>
 <script>
-    import {channelList,addChannel,editChannel} from "@/api/channel";
+    import {channelList, addChannel, editChannel} from "@/api/channel";
 
     export default {
         data() {
@@ -101,7 +104,7 @@
                     return callback(new Error('游戏服登录回调地址不能为空!'));
                 }
                 let l = value.length;
-                if (l> 100) {
+                if (l > 100) {
                     return callback(new Error('游戏服登录回调地址长度不能大于100字符'));
                 }
                 callback();
@@ -110,6 +113,7 @@
                 activeName: 'list',
                 tableRoomData: [],
                 closeModal: false,
+                isAdd: false,
                 paginate: {
                     total: 0,        // 总数
                     pageIndex: 1,  // 当前位于哪页
@@ -120,7 +124,7 @@
                 loading: false,
                 form_list: {
                     channel_name: '',
-                    limit: 10,
+                    limit: 15,
                     page: 1,
                 },
                 dialogVisible: false,
@@ -132,8 +136,8 @@
                 },
                 rules: {
                     channel_name: [
-                        {required:true, message: '请输入渠道名称最长30位', trigger: 'blur'},
-                        {min:1,max:30, message: '长度在 1 到 30个字符', trigger: 'blur'}
+                        {required: true, message: '请输入渠道名称最长30位', trigger: 'blur'},
+                        {min: 1, max: 30, message: '长度在 1 到 30个字符', trigger: 'blur'}
                     ],
                     gameSrvAddr: [
                         {validator: gameSerAddrCheck, trigger: 'blur'}
@@ -183,21 +187,23 @@
             dialogConfirm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        if (this.dialog_form.channel_id) {
-                            editChannel(this.dialog_form)
-                                .then(response => {
-                                    this.dialogVisible = false;
-                                    this.loadChannelListData();
-                                }).catch(function (error) {
-                            }).then(function () {
-                            });
-                        } else {
+                        if (this.isAdd) {
                             addChannel(this.dialog_form)
                                 .then(response => {
                                     this.dialogVisible = false;
                                     this.loadChannelListData();
                                 }).catch(function (error) {
                             }).then(function () {
+
+                            });
+                        } else {
+                            editChannel(this.dialog_form)
+                                .then(response => {
+                                    this.dialogVisible = false;
+                                    this.loadChannelListData();
+                                }).catch(function (error) {
+                            }).then(function () {
+
                             });
                         }
                     } else {
@@ -209,17 +215,19 @@
                 this.dialogVisible = false;
             },
             handleEditChannel(row) {
+                this.isAdd=false;
                 this.dialogVisible = true
-                this.dialog_form.gameSrvAddr =row.gameSrvAddr;
-                this.dialog_form.loginCallBackAddr =row.loginCallBackAddr;
-                this.dialog_form.channel_id=row.channel_id;
-                this.dialog_form.channel_name=row.channel_name;
+                this.dialog_form.gameSrvAddr = row.gameSrvAddr;
+                this.dialog_form.loginCallBackAddr = row.loginCallBackAddr;
+                this.dialog_form.channel_id = row.channel_id;
+                this.dialog_form.channel_name = row.channel_name;
             },
             handleAddChannel() {
-                this.dialog_form.gameSrvAddr ='';
+                this.isAdd=true;
+                this.dialog_form.gameSrvAddr = '';
                 this.dialog_form.loginCallBackAddr = '';
-                this.dialog_form.channel_id='';
-                this.dialog_form.channel_name='';
+                this.dialog_form.channel_id = '';
+                this.dialog_form.channel_name = '';
                 this.dialogVisible = true;
             },
         }

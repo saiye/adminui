@@ -101,7 +101,7 @@
                 form_list: {
                     search_name: '',
                     page: 1,
-                    limit: 15,
+                    limit:15,
                     time_type: '',
                     price_type: '',
                 },

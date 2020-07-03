@@ -21,6 +21,14 @@
                             round
                     >新增板子
                     </el-button>
+                    <el-button
+                            size="mini"
+                            style="float: right;margin-right: 20px;margin-bottom: 10px;"
+                            @click="handleAddBoard"
+                            round
+                    >导入板子
+                    </el-button>
+
                 </el-col>
             </el-row>
             <el-table
