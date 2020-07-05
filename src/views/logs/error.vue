@@ -18,25 +18,18 @@
 
 
         <el-dialog
-                :title=drawer_list.title
-                :visible.sync="dialogVisible"
-                width="30%"
-                :before-close="handleClose">
-            <span>{{drawer_list.title}}</span>
-          <span slot="footer" class="dialog-footer">
+                :title=list.title
+                :visible.sync="list.drawer"
+                width="90%"
+                :close-on-click-modal="false"
+                :before-close="handleClose" >
+            <span>{{list.title}}</span>
+               <pre style="white-space:pre-wrap;word-wrap: break-word;">{{info}}</pre>
+           <span slot="footer" class="dialog-footer">
             <el-button @click="handleClose">取 消</el-button>
             <el-button type="primary" @click="handleClose">确 定</el-button>
           </span>
         </el-dialog>
-
-        <el-drawer
-                size="80%"
-                :title="drawer_list.title"
-                :visible.sync="drawer_list.drawer"
-                :direction="drawer_list.direction"
-                :before-close="handleClose">
-            <pre>{{info}}</pre>
-        </el-drawer>
 
     </div>
 </template>
@@ -50,7 +43,7 @@
             return {
                 tableData: [],
                 loading:false,
-                drawer_list:{
+                list:{
                     title:'',
                     drawer: false,
                     direction: 'rtl',
@@ -75,20 +68,20 @@
                     console.log('add role onSubmit');
                 });
             },
-            handleClose(done) {
-                done();
+            handleClose() {
+                this.list.drawer=false;
             },
             showLog(row,column, event){
-                this.drawer_list.title=row.file;
+                this.list.title=row.file;
                 if(!this.tmp[row.file]){
-                    showLogData(this.drawer_list).then(res=>{
+                    showLogData(this.list).then(res=>{
                         this.info=res.data.content;
                         this.tmp[row.file]=res.data.content;
-                        this.drawer_list.drawer=true;
+                        this.list.drawer=true;
                     });
                 }else{
                     this.info=this.tmp[row.file];
-                    this.drawer_list.drawer=true;
+                    this.list.drawer=true;
                 }
 
             },
