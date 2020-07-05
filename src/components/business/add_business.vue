@@ -29,15 +29,17 @@
 
                 <el-form-item label="营业执照">
                     <el-upload
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            action=""
                             list-type="picture-card"
                             :on-preview="handlePictureCardPreview"
                             :on-remove="handleRemove"
+                            :before-upload="beforeAvatarUpload"
+                            :http-request="doUploadImage"
                     >
                         <i class="el-icon-plus"></i>
                     </el-upload>
                     <el-dialog
-                            width="30%"
+                            width="40%"
                             title="营业执照-原图"
                             :visible.sync="dialogImgVisible"
                             append-to-body
@@ -82,6 +84,9 @@
     import {
         addCompany,
     } from "@/api/company";
+    import {
+        uploadImage,deleteImage
+    } from "@/api/tool";
     export default {
         'name': 'add_business',
         props:['state'],
@@ -104,6 +109,7 @@
                 dialog_form: {
                     company_name: "",
                     state_id: "",
+                    imageData:[],
                     real_name: "",
                     phone: "",
                     proportion: 100,
@@ -146,6 +152,7 @@
         },
         methods: {
             businessDialogCance() {
+                this.dialog_form.imageData=[];
                 this.dialogVisible = false;
             },
             businessDialogConfirm(formName) {
@@ -171,12 +178,45 @@
 
             },
             handleRemove(file, fileList) {
+                //deleteImage
                 console.log(file, fileList);
             },
             handlePictureCardPreview(file) {
-                this.dialogImageUrl = file.url;
-                this.dialogImgVisible = true;
+                    this.dialogImageUrl = file.url;
+                    this.dialogImgVisible = true;
             },
+            beforeAvatarUpload(file) {
+                let types=[
+                    {
+                       'type':'image/jpeg',
+                    },
+                    {
+                       'type':'image/png',
+                    },
+                ];
+                const isImg=types.find(item=>{
+                    console.log(item.type)
+                    return item.type==file.type;
+                })
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isImg) {
+                    this.$message.error('上传头像图片只能是 JPG 或者Png格式!'+file.type);
+                    return false;
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                    return false;
+                }
+                return true;
+            },
+            doUploadImage(file){
+                let formData = new FormData();
+                formData.set("file", file.file);
+                formData.set("type",1);
+                uploadImage(formData).then(response => {
+                    this.dialog_form.imageData.push(response.data.id);
+                }).catch();
+            }
         }
     };
 </script>

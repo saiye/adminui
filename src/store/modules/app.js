@@ -5,6 +5,7 @@ const state = {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false
   },
+  upload:false,
   device: 'desktop'
 }
 
@@ -25,7 +26,11 @@ const mutations = {
   },
   TOGGLE_DEVICE: (state, device) => {
     state.device = device
-  }
+  },
+  TOGGLE_UPLOAD:(state,upload)=>{
+    state.upload=upload;
+  },
+
 }
 
 const actions = {
@@ -37,6 +42,9 @@ const actions = {
   },
   toggleDevice({ commit }, device) {
     commit('TOGGLE_DEVICE', device)
+  },
+  toggleUpload({ commit }, upload) {
+    commit('TOGGLE_UPLOAD', upload)
   }
 }
 

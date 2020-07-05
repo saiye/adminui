@@ -19,6 +19,9 @@ service.interceptors.request.use(
        if (store.getters.token) {
            config.headers['Authorization'] ='Bearer '+getToken();
         }
+       if (store.getters.upload) {
+           config.headers['Content-Type'] ='multipart/form-data';
+        }
         return config
     },
     error => {

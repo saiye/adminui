@@ -7,5 +7,6 @@ const getters = {
   user_id: state => state.cpuser.user_id,
   role_id: state => state.cpuser.role_id,
   email: state => state.cpuser.email,
+  upload: state => state.app.upload,
 }
 export default getters
