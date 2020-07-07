@@ -158,6 +158,7 @@
             },
             handleDialogConfirm(){
                 this.visible=false;
+                this.loadUserListData();
             },
             handleDialogCance(){
                 this.visible=false;
