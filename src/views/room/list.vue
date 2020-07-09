@@ -3,7 +3,7 @@
         <el-tab-pane label="房间列表" :inline="true" name="list">
             <el-form :inline="true" :model="form_list" class="demo-form-inline">
                 <el-form-item>
-                    <el-input v-model="form_list.business_name" placeholder="请输入商户名称"></el-input>
+                    <el-input v-model="form_list.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-input v-model="form_list.room_name" placeholder="请输入房间名称"></el-input>
@@ -232,7 +232,7 @@
                 loading: false,
                 form_list: {
                     room_name: '',
-                    business_name: '',
+                    company_name: '',
                     limit: 10,
                     page: 1,
                 },

@@ -24,7 +24,7 @@
                     <el-button
                             size="mini"
                             style="float: right;margin-right: 20px;margin-bottom: 10px;"
-                            @click="handleAddBoard"
+                            @click="importBoard"
                             round
                     >导入板子
                     </el-button>
@@ -212,6 +212,9 @@
                 this.dialog_form.board_id='';
                 this.dialogVisible = true;
             },
+            importBoard(){
+                alert('xx')
+            }
         }
     };
 </script>

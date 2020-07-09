@@ -11,7 +11,7 @@
                 </el-button>
             </el-col>
         </el-row>
-        <el-dialog title="添加店面" :close-on-click-modal="closeModal"  :visible.sync="dialogVisible" width="700px">
+        <el-dialog title="添加店面" :close-on-click-modal="closeModal"  :visible.sync="dialogVisible" >
             <div class="add-dialog-box">
                 <el-form :model="dialog_form"  ref="dialog_form" :rules="rules" label-width="100px">
                     <el-form-item label="店面名称" prop="store_name">
@@ -19,7 +19,7 @@
                     </el-form-item>
 
                     <el-form-item label="所在区域" prop="area">
-                        <el-cascader placeholder="选择所在区域" v-model=dialog_form.area :props="areaListData" clearable ></el-cascader>
+                        <el-cascader placeholder="选择所在区域" size="medium" v-model=dialog_form.area :props="areaListData" clearable ></el-cascader>
                     </el-form-item>
 
                     <el-form-item label="店面地址"  prop="address">
@@ -27,14 +27,7 @@
                     </el-form-item>
 
                     <el-form-item label="所属商户"  prop="company_id">
-                    <el-select
-                                v-model="dialog_form.company_id"
-                                filterable
-                                remote
-                                reserve-keyword
-                                placeholder="请输入商户关键词"
-                                :remote-method="remoteCompanyList"
-                                :loading="loading">
+                       <el-select v-model="dialog_form.company_id">
                             <el-option
                                      v-for="item in companyListData"
                                     :key="item.company_id"
@@ -50,6 +43,8 @@
                                 list-type="picture-card"
                                 :on-preview="handlePictureCardPreview"
                                 :on-remove="handleRemove"
+                                :before-upload="beforeAvatarUpload"
+                                :http-request="doUploadImage"
                         >
                             <i class="el-icon-plus"></i>
                         </el-upload>
@@ -103,7 +98,9 @@
 <script>
     import {areaList,companyList} from "@/api/company";
     import {addStore} from "@/api/store";
-    import {uploadImage,deleteImage} from "@/api/tool";
+    import {
+        uploadImage,deleteImage
+    } from "@/api/tool";
     export default {
         'name': 'add_store',
         props: ['state'],
@@ -117,6 +114,7 @@
                 dialogImgVisible: false,
                 visibleDialog: this.visible,
                 dialog_form: {
+                    imageData:[],
                     describe: "",
                     store_name: "",
                     company_id: "",
@@ -186,6 +184,9 @@
                 },
             };
         },
+        mounted(){
+            this.remoteCompanyList();
+        },
         methods: {
             storeDialogCance() {
                 this.dialogVisible = false;
@@ -196,6 +197,7 @@
                         addStore(this.dialog_form)
                             .then(response => {
                                 this.dialogVisible = false;
+                                this.dialog_form.imageData=[];
                                 //回调父组件，刷新页面
                                 this.$emit('success');
                             }).catch(function (error) {
@@ -216,14 +218,41 @@
                 this.dialogImageUrl = file.url;
                 this.dialogImgVisible = true;
             },
-            doUploadImage(){
-              //uploadImage,deleteImage
+            beforeAvatarUpload(file) {
+                let types=[
+                    {
+                        'type':'image/jpeg',
+                    },
+                    {
+                        'type':'image/png',
+                    },
+                ];
+                const isImg=types.find(item=>{
+                    console.log(item.type)
+                    return item.type==file.type;
+                })
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isImg) {
+                    this.$message.error('上传图片只能是 JPG 或者Png格式!'+file.type);
+                    return false;
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传图片大小不能超过 2MB!');
+                    return false;
+                }
+                return true;
             },
-            remoteCompanyList(query){
+            doUploadImage(file){
+                let formData = new FormData();
+                formData.set("file", file.file);
+                formData.set("type",2);
+                uploadImage(formData).then(response => {
+                    this.dialog_form.imageData.push(response.data.id);
+                }).catch();
+            },
+            remoteCompanyList(){
                 this.loading = true;
-                companyList({
-                    company_name:query,
-                }).then(response => {
+                companyList({limit:500,page:1}).then(response => {
                    this.companyListData=response.data.data.data;
                    this.loading=false;
                 });

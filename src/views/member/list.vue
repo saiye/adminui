@@ -48,7 +48,7 @@
                 <el-table-column prop="created_at" label="注册日期"></el-table-column>
                 <el-table-column prop="lock" label="账号状态">
                     <template slot-scope="scope">
-                        <span>{{scope.row.lock==1?'正常':'锁定'}}</span>
+                        <span>{{scope.row.lock==1?'正常':'已禁封'}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column align="right" label="操作">
@@ -190,7 +190,7 @@
             },
             onSearchList(){
                 this.loadUserListData();
-            },
+            }
         }
     };
 

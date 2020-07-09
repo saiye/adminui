@@ -51,7 +51,11 @@
                 <el-table-column prop="manage.real_name" label="联系人"></el-table-column>
                 <el-table-column prop="manage.phone" label="联系电话"></el-table-column>
                 <el-table-column prop="created_at" label="注册日期"></el-table-column>
-                <el-table-column prop="status" label="状态"></el-table-column>
+                <el-table-column prop="status" label="状态">
+                    <template slot-scope="scope">
+                        <span>{{scope.status==1?'正常':'禁封'}}</span>
+                    </template>
+                </el-table-column>
 
                 <el-table-column align="right" label="操作">
                     <template slot-scope="scope">
@@ -156,7 +160,11 @@
                 <el-table-column prop="manage.real_name" label="联系人"></el-table-column>
                 <el-table-column prop="manage.phone" label="联系电话"></el-table-column>
                 <el-table-column prop="created_at" label="注册日期"></el-table-column>
-                <el-table-column prop="check" label="状态"></el-table-column>
+                <el-table-column  label="状态">
+                    <template slot-scope="scope">
+                        <span>{{scope.check==1?'通过':'拒绝'}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column align="right" label="操作">
                     <template slot-scope="scope">
                         <el-button
@@ -397,7 +405,7 @@
                 this.rejectMessage.company_id = row.company_id;
                 checkCompany(this.rejectMessage)
                     .then(response => {
-                        this.loadBusinessListData();
+                        this.loadCheckListData();
                     })
                     .catch(function (error) {
                         console.log(error);
