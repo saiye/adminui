@@ -1,12 +1,13 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="渠道列表" :inline="true" name="list">
-            <el-form :inline="true" :model="form_list" class="demo-form-inline">
-                <el-form-item>
+            <el-form :inline="true" :model="form_list"  ref="searchForm"  class="demo-form-inline">
+                <el-form-item prop="channel_name">
                     <el-input v-model="form_list.channel_name" placeholder="请输入渠道名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item >
                     <el-button type="primary" icon="el-icon-search" @click="loadChannelListData" round>查询</el-button>
+                    <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
             <el-row>
@@ -31,7 +32,7 @@
                 <el-table-column prop="channel_id" label="渠道id"></el-table-column>
                 <el-table-column prop="channel_name" label="渠道名称"></el-table-column>
                 <el-table-column prop="gameSrvAddr" label="游戏服地址"></el-table-column>
-                <el-table-column prop="loginCallBackAddr" label="登录回调地址"></el-table-column>
+                <el-table-column prop="callBackServer" label="游戏服回调地址"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="handleEditChannel(scope.row)" round>编辑渠道</el-button>
@@ -64,16 +65,13 @@
                     <el-form-item label="渠道名称" prop="channel_name">
                         <el-input v-model="dialog_form.channel_name" placeholder="请输入渠道名字最长30位"></el-input>
                     </el-form-item>
-
                     <el-form-item label="游戏服地址" prop="gameSrvAddr">
                         <el-input v-model="dialog_form.gameSrvAddr" placeholder="请输入游戏服地址"></el-input>
                     </el-form-item>
-                    <el-form-item label="登录回调地址" prop="loginCallBackAddr">
-                        <el-input v-model="dialog_form.loginCallBackAddr" placeholder="请输入登录回调地址"></el-input>
+                    <el-form-item label="回调地址" prop="callBackServer">
+                        <el-input v-model="dialog_form.callBackServer" placeholder="请输入回调地址"></el-input>
                     </el-form-item>
-
                 </el-form>
-
                 <span slot="footer" class="dialog-footer">
           <el-button @click="dialogCance">取 消</el-button>
           <el-button type="primary" @click="dialogConfirm('dialog_form')">确 定</el-button>
@@ -99,13 +97,13 @@
                 }
                 callback();
             };
-            let loginCallBackAddrCheck = (rule, value, callback) => {
+            let callBackServerAddrCheck = (rule, value, callback) => {
                 if (!value) {
-                    return callback(new Error('游戏服登录回调地址不能为空!'));
+                    return callback(new Error('游戏服回调地址不能为空!'));
                 }
                 let l = value.length;
                 if (l > 100) {
-                    return callback(new Error('游戏服登录回调地址长度不能大于100字符'));
+                    return callback(new Error('游戏服回调地址长度不能大于100字符'));
                 }
                 callback();
             };
@@ -130,7 +128,7 @@
                 dialogVisible: false,
                 dialog_form: {
                     gameSrvAddr: '',
-                    loginCallBackAddr: '',
+                    callBackServer: '',
                     channel_id: '',
                     channel_name: "",
                 },
@@ -142,8 +140,8 @@
                     gameSrvAddr: [
                         {validator: gameSerAddrCheck, trigger: 'blur'}
                     ],
-                    loginCallBackAddr: [
-                        {validator: loginCallBackAddrCheck, trigger: 'blur'}
+                    callBackServer: [
+                        {validator: callBackServerAddrCheck, trigger: 'blur'}
                     ]
                 },
             };
@@ -218,7 +216,7 @@
                 this.isAdd=false;
                 this.dialogVisible = true
                 this.dialog_form.gameSrvAddr = row.gameSrvAddr;
-                this.dialog_form.loginCallBackAddr = row.loginCallBackAddr;
+                this.dialog_form.callBackServer = row.callBackServer;
                 this.dialog_form.channel_id = row.channel_id;
                 this.dialog_form.channel_name = row.channel_name;
             },
@@ -230,6 +228,10 @@
                 this.dialog_form.channel_name = '';
                 this.dialogVisible = true;
             },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.loadChannelListData();
+            }
         }
     };
 </script>

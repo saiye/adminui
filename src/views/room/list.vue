@@ -1,15 +1,16 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="房间列表" :inline="true" name="list">
-            <el-form :inline="true" :model="form_list" class="demo-form-inline">
-                <el-form-item>
+            <el-form :inline="true" :model="form_list" ref="searchForm" class="demo-form-inline">
+                <el-form-item prop="company_name">
                     <el-input v-model="form_list.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="room_name">
                     <el-input v-model="form_list.room_name" placeholder="请输入房间名称"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="loadRoomListData" round>查询</el-button>
+                    <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
             <el-row>
@@ -460,6 +461,10 @@
                 }).catch(function (error) {
                 }).then(function () {
                 });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.loadRoomListData();
             }
         }
     };

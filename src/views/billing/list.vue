@@ -1,12 +1,12 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="计费模式列表" name="list">
-            <el-form :model="form_list" :inline="true">
-                <el-form-item>
+            <el-form :model="form_list" :inline="true"  ref="searchForm">
+                <el-form-item prop="search_name">
                     <el-input v-model="form_list.search_name" placeholder="请输入店面，模式名进行搜索"></el-input>
                 </el-form-item>
 
-                <el-form-item label="请选择计费单位">
+                <el-form-item label="请选择计费单位" prop="time_type">
                     <el-select v-model="form_list.time_type" clearable placeholder="请选择计费单位">
                         <el-option
                                 v-for="item in TimeTypeArr"
@@ -17,7 +17,7 @@
                     </el-select>
                 </el-form-item>
 
-                <el-form-item label="货币类型">
+                <el-form-item label="货币类型" prop="price_type">
                     <el-select v-model="form_list.price_type" clearable placeholder="请选择货币类型">
                         <el-option
                                 v-for="item in PriceTypeArr"
@@ -30,6 +30,7 @@
 
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
+                    <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
             <cp_add_billing v-bind:TimeTypeArr="TimeTypeArr" v-bind:PriceTypeArr="PriceTypeArr" v-on:success="loadUserListData"></cp_add_billing>
@@ -153,6 +154,10 @@
             onSearchList() {
                 this.loadUserListData();
             },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.loadUserListData();
+            }
         }
     };
 

@@ -1,34 +1,26 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="板子列表" :inline="true" name="list">
-            <el-form :inline="true" :model="form_list" class="demo-form-inline">
-                <el-form-item>
+            <el-form :inline="true" :model="form_list" ref="searchForm" class="demo-form-inline">
+                <el-form-item prop="board_name" >
                     <el-input v-model="form_list.board_name" placeholder="请输入板子名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="dup_id" >
                     <el-input v-model="form_list.dup_id" placeholder="请输入板子id"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="loadBoardListData" round>查询</el-button>
+                    <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
             <el-row>
-                <el-col :span="24">
-                    <el-button
-                            size="mini"
-                            style="float: right;margin-right: 20px;margin-bottom: 10px;"
-                            @click="handleAddBoard"
-                            round
-                    >新增板子
-                    </el-button>
-                    <el-button
-                            size="mini"
-                            style="float: right;margin-right: 20px;margin-bottom: 10px;"
-                            @click="importBoard"
-                            round
-                    >导入板子
-                    </el-button>
-
+                <el-col :span="20">
+                    <el-upload action="" :before-upload="beforeExcelUpload" :http-request="doUploadExcel"   :on-remove="handleRemove">
+                        <el-button size="mini" style="float: right;margin-right: 20px;margin-bottom: 10px;" round>导入板子</el-button>
+                    </el-upload>
+                </el-col>
+                <el-col :span="4">
+                    <el-button size="mini" style="float: right;margin-right: 20px;margin-bottom: 10px;" @click="handleAddBoard" round>新增板子</el-button>
                 </el-col>
             </el-row>
             <el-table
@@ -86,7 +78,7 @@
     </el-tabs>
 </template>
 <script>
-    import {boardList,addBoard,editBoard} from "@/api/board";
+    import {boardList,addBoard,editBoard,importExcel} from "@/api/board";
 
     export default {
         data() {
@@ -212,8 +204,45 @@
                 this.dialog_form.board_id='';
                 this.dialogVisible = true;
             },
-            importBoard(){
-                alert('xx')
+
+            beforeExcelUpload(file) {
+                let types=[
+                    {
+                        'type':'application/vnd.ms-excel',
+                    },
+                    {
+                        'type':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    },
+                ];
+                const isEXCEL=types.find(item=>{
+                    console.log(item.type)
+                    return item.type==file.type;
+                })
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isEXCEL) {
+                    this.$message.error('上传文件只能是 xlsx 或者xls格式!'+file.type);
+                    return false;
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传文件大小不能超过 2MB!');
+                    return false;
+                }
+                return true;
+            },
+            doUploadExcel(file){
+                let formData = new FormData();
+                formData.set("excel", file.file);
+                importExcel(formData).then(response => {
+                    console.log('upload xls ok！')
+                }).catch();
+            },
+            handleRemove(file, fileList) {
+                //deleteImage
+                console.log(file, fileList);
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.loadBoardListData();
             }
         }
     };

@@ -1,15 +1,18 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="会员列表"   name="list">
-            <el-form  :model="form_list" >
-                <el-form-item >
+            <el-form  :model="form_list"  ref="searchForm" >
+                <el-form-item prop="search_name">
                     <el-row>
-                        <el-col :span="6">
+                        <el-col :span="6" >
                             <el-input v-model="form_list.search_name"   placeholder="请输入会员的账号，昵称，真实姓名，邮箱地址进行搜索">
                             </el-input>
                         </el-col>
                         <el-col :span="2">
                             <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
+                        </el-col>
+                        <el-col :span="2">
+                            <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
                         </el-col>
                     </el-row>
                 </el-form-item>
@@ -189,6 +192,13 @@
                 this.loadUserListData();
             },
             onSearchList(){
+                this.loadUserListData();
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.form_list.search_name='';
+                this.form_list.page=1;
+                this.form_list.limit=15;
                 this.loadUserListData();
             }
         }

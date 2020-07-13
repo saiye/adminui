@@ -1,27 +1,31 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="店面列表" :inline="true" name="list">
-            <el-form :inline="true" :model="form_list" class="demo-form-inline">
-                <el-form-item>
+            <el-form :inline="true"  ref="searchForm"  :model="form_list" class="demo-form-inline">
+                <el-form-item prop="company_name">
                     <el-input v-model="form_list.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="store_name">
                     <el-input v-model="form_list.store_name" placeholder="请输入店面名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="real_name">
                     <el-input v-model="form_list.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
-                <el-date-picker
-                        v-model="form_list.listDate"
-                        type="datetimerange"
-                        align="right"
-                        :picker-options="pickerOptions"
-                        start-placeholder="请选择起始日期"
-                        end-placeholder="请选择结束日期"
-                        :default-time="['00:00:00', '23:59:59']">
-                </el-date-picker>
+                <el-form-item prop="listDate">
+                    <el-date-picker
+                            v-model="form_list.listDate"
+                            type="datetimerange"
+                            align="right"
+                            :picker-options="pickerOptions"
+                            start-placeholder="请选择起始日期"
+                            end-placeholder="请选择结束日期"
+                            :default-time="['00:00:00', '23:59:59']">
+                    </el-date-picker>
+                </el-form-item>
+
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
+                    <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
             <add_store v-on:success="loadStoreListData"></add_store>
@@ -64,28 +68,31 @@
         </el-tab-pane>
         <el-tab-pane label="店面审核" name="check">
 
-            <el-form :inline="true" :model="form_check" class="demo-form-inline">
-                <el-form-item>
-                    <el-input v-model="form_check.company_name" placeholder="请输入商户名称"></el-input>
+            <el-form :inline="true"  ref="searchCheckForm" :model="form_check" class="demo-form-inline">
+                <el-form-item prop="company_name">
+                    <el-input v-model="form_check.company_name"  placeholder="请输入商户名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="store_name">
                     <el-input v-model="form_check.store_name" placeholder="请输入店面名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="real_name">
                     <el-input v-model="form_check.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
-                <el-date-picker
-                        v-model="form_check.listDate"
-                        type="datetimerange"
-                        align="right"
-                        :picker-options="pickerOptions"
-                        start-placeholder="请选择起始日期"
-                        end-placeholder="请选择结束日期"
-                        :default-time="['00:00:00', '23:59:59']">
-                </el-date-picker>
+                <el-form-item prop="listDate">
+                    <el-date-picker
+                            v-model="form_check.listDate"
+                            type="datetimerange"
+                            align="right"
+                            :picker-options="pickerOptions"
+                            start-placeholder="请选择起始日期"
+                            end-placeholder="请选择结束日期"
+                            :default-time="['00:00:00', '23:59:59']">
+                    </el-date-picker>
+                </el-form-item>
 
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="onSearchCheckList" round>查询</el-button>
+                    <el-button type="danger" icon="el-icon-search" @click="resetCheckForm('searchCheckForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
             <el-table
@@ -346,6 +353,14 @@
                 });
 
             },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.loadStoreListData();
+            },
+            resetCheckForm(formName) {
+                this.$refs[formName].resetFields();
+                this.loadStoreCheckListData();
+            }
         }
     };
 </script>

@@ -23,3 +23,10 @@ export function addBoard(data) {
         data
     })
 }
+export function importExcel(data) {
+    return request({
+        url: 'game/board/excel',
+        method: 'post',
+        data
+    })
+}

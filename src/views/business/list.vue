@@ -2,14 +2,14 @@
     <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="商户列表" :inline="true" name="list">
 
-            <el-form :inline="true" :model="form_list" class="demo-form-inline">
-                <el-form-item>
+            <el-form :inline="true"  ref="searchForm"  :model="form_list" class="demo-form-inline">
+                <el-form-item prop="company_name">
                     <el-input v-model="form_list.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="real_name">
                     <el-input v-model="form_list.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="state_id">
                     <el-select v-model="form_list.state_id" clearable placeholder="请选择国家">
                         <el-option
                                 v-for="item in state"
@@ -19,19 +19,22 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
+                <el-form-item prop="listDate">
+                    <el-date-picker
+                            v-model="form_list.listDate"
+                            type="datetimerange"
+                            align="right"
+                            :picker-options="pickerOptions"
+                            start-placeholder="请选择起始日期"
+                            end-placeholder="请选择结束日期"
+                            :default-time="['00:00:00', '23:59:59']"
+                    ></el-date-picker>
+                </el-form-item>
 
-                <el-date-picker
-                        v-model="form_list.listDate"
-                        type="datetimerange"
-                        align="right"
-                        :picker-options="pickerOptions"
-                        start-placeholder="请选择起始日期"
-                        end-placeholder="请选择结束日期"
-                        :default-time="['00:00:00', '23:59:59']"
-                ></el-date-picker>
 
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
+                    <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
             <add_business v-bind:state="state" v-on:success="loadBusinessListData"></add_business>
@@ -53,7 +56,7 @@
                 <el-table-column prop="created_at" label="注册日期"></el-table-column>
                 <el-table-column prop="status" label="状态">
                     <template slot-scope="scope">
-                        <span>{{scope.status==1?'正常':'禁封'}}</span>
+                        <span>{{scope.row.status==1?'正常':'禁封'}}</span>
                     </template>
                 </el-table-column>
 
@@ -111,14 +114,14 @@
                 </span>
             </el-dialog>
 
-            <el-form :inline="true" :model="check_list" class="demo-form-inline">
-                <el-form-item>
+            <el-form :inline="true"  ref="searchCheckForm" :model="check_list" class="demo-form-inline">
+                <el-form-item prop="company_name">
                     <el-input v-model="check_list.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="real_name">
                     <el-input v-model="check_list.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
-                <el-form-item>
+                <el-form-item prop="state_id">
                     <el-select v-model="check_list.state_id" clearable placeholder="请选择国家">
                         <el-option
                                 v-for="item in state"
@@ -128,19 +131,20 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-
-                <el-date-picker
-                        v-model="check_list.listDate"
-                        type="datetimerange"
-                        align="right"
-                        :picker-options="pickerOptions"
-                        start-placeholder="请选择起始日期"
-                        end-placeholder="请选择结束日期"
-                        :default-time="['00:00:00', '23:59:59']"
-                ></el-date-picker>
-
+                <el-form-item prop="listDate">
+                    <el-date-picker
+                            v-model="check_list.listDate"
+                            type="datetimerange"
+                            align="right"
+                            :picker-options="pickerOptions"
+                            start-placeholder="请选择起始日期"
+                            end-placeholder="请选择结束日期"
+                            :default-time="['00:00:00', '23:59:59']"
+                    ></el-date-picker>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="onSearchCheckList" round>查询</el-button>
+                    <el-button type="danger" icon="el-icon-search" @click="resetCheckForm('searchCheckForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
 
@@ -162,7 +166,7 @@
                 <el-table-column prop="created_at" label="注册日期"></el-table-column>
                 <el-table-column  label="状态">
                     <template slot-scope="scope">
-                        <span>{{scope.check==1?'通过':'拒绝'}}</span>
+                        <span>{{scope.row.check==2?'拒绝':'未审核'}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column align="right" label="操作">
@@ -445,7 +449,15 @@
             },
             handleDialogRejectClose() {
                 console.log(11)
-            }
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.loadBusinessListData();
+            },
+            resetCheckForm(formName) {
+                this.$refs[formName].resetFields();
+                this.loadCheckListData();
+            },
         }
     };
 </script>

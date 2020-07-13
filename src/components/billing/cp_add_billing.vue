@@ -15,8 +15,8 @@
             <div class="add-dialog-box">
                 <el-form :model="dialog_form" ref="dialog_form" :rules="rules" label-width="150px">
 
-                    <el-form-item label="选择所属门店" prop="storeArr">
-                        <el-cascader placeholder="选择所在区域" v-model=dialog_form.storeArr :props="storeListData" clearable ></el-cascader>
+                    <el-form-item label="所属门店" prop="storeArr">
+                        <el-cascader placeholder="选择所属门店" v-model=dialog_form.storeArr :props="storeListData" clearable ></el-cascader>
                     </el-form-item>
 
                     <el-form-item label="模式名称" prop="billing_name">

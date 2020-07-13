@@ -19,7 +19,7 @@
                     </el-form-item>
 
                     <el-form-item label="所在区域" prop="area">
-                        <el-cascader placeholder="选择所在区域" size="medium" v-model=dialog_form.area :props="areaListData" clearable ></el-cascader>
+                        <el-cascader placeholder="选择所在区域" style="width:350px; " size="medium" v-model=dialog_form.area :props="areaListData" clearable ></el-cascader>
                     </el-form-item>
 
                     <el-form-item label="店面地址"  prop="address">
@@ -257,6 +257,7 @@
                    this.loading=false;
                 });
             }
+
         }
     };
 </script>
