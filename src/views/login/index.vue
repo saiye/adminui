@@ -3,17 +3,16 @@
         <el-main>
             <div class="login-box">
                 <el-card class="box-card">
-                    <el-form ref="form" :model="form" label-width="40px" status-icon :rules="rules"
-                             style="margin-top: 10px;">
-                        <el-form-item label="账号" prop="username">
+                    <el-form  :model="form" :rules="rules"   ref="login_form"  label-width="40px"  status-icon style="margin-top: 10px;">
+                        <el-form-item label="账号" prop="user_name">
                             <el-input v-model="form.user_name"></el-input>
                         </el-form-item>
                         <el-form-item label="密码" prop="password">
                             <el-input v-model="form.password" show-password></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="submitForm('form')">登录</el-button>
-                            <el-button @click="resetForm('form')">重置</el-button>
+                            <el-button type="primary" @click="submitForm('login_form')">登录</el-button>
+                            <el-button @click="resetForm('login_form')">重置</el-button>
                         </el-form-item>
                     </el-form>
                 </el-card>
@@ -35,14 +34,14 @@
 <script>
     export default {
         data() {
-            var checkEmail = (rule, value, callback) => {
+            let checkEmail = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('账号不能为空'));
                 } else {
                     callback()
                 }
             };
-            var checkPassword = (rule, value, callback) => {
+            let checkPassword = (rule, value, callback) => {
                 if (!value) {
                     return callback(new Error('密码不能为空'));
                 } else {
@@ -56,10 +55,10 @@
                 },
                 redirect: undefined,
                 rules: {
-                    email: [
+                    user_name: [
                         {validator: checkEmail, trigger: 'blur'}
                     ],
-                    checkPass: [
+                    password: [
                         {validator: checkPassword, trigger: 'blur'}
                     ],
                 }
@@ -80,14 +79,7 @@
                         this.$store.dispatch('cpuser/login', this.form).then(() => {
                             this.$router.push({path: this.redirect || '/'})
                         }).catch((e) => {
-                            console.log('login success 22!!');
-                            console.log(e);
                         })
-                        console.log('---' + this.redirect)
-                        //登录操作！
-                    } else {
-                        console.log('error submit!!');
-                        return false;
                     }
                 });
             },
