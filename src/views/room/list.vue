@@ -69,7 +69,7 @@
             <!--dialog start-->
             <el-dialog :title=title :close-on-click-modal="closeModal" :visible.sync="dialogVisible" width="600px;">
 
-                    <el-form :model="dialog_form" ref="dialog_form" :rules="rules" label-width="100px">
+                    <el-form :model="dialog_form" ref="dialog_form" :rules="rules" label-width="120px">
                         <el-form-item label="所属门店" prop="storeArr">
                             <el-cascader placeholder="选择所在区域" v-on:change="loadBillingData" v-model=dialog_form.storeArr
                                          :props="storeListData" clearable></el-cascader>
@@ -89,6 +89,10 @@
                                         :value="item.dup_id">
                                 </el-option>
                             </el-select>
+                        </el-form-item>
+
+                        <el-form-item label="设备Mqtt主题" prop="deviceMqttTopic">
+                            <el-input v-model="dialog_form.deviceMqttTopic" placeholder="房间设备mqtt主题"></el-input>
                         </el-form-item>
 
 
@@ -263,6 +267,7 @@
                 },
                 dialog_form: {
                     room_id:"",
+                    deviceMqttTopic:"",
                     dup_id: 1,
                     room_name: "",
                     seats_num: 16,
@@ -279,6 +284,10 @@
                     ],
                     seats_num: [
                         { validator:checkSeatsNum, trigger: 'blur'}
+                    ],
+                    deviceMqttTopic:[
+                        {required: true, message: '请输入房间Mqtt主题', trigger: 'blur'},
+                        {min: 1, max: 100, message: '长度在 1 到 100个字符', trigger: 'blur'}
                     ],
                     dup_id: [
                         {required: true, message: '请填选择板子', trigger: 'change'}

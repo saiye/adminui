@@ -26,6 +26,11 @@
                     <el-form-item label="座位数量" prop="seats_num">
                         <el-input v-model.number="dialog_form.seats_num" placeholder="请选择设置座位数量"></el-input>
                     </el-form-item>
+
+                    <el-form-item label="设备mqtt主题" prop="deviceMqttTopic">
+                        <el-input v-model="dialog_form.deviceMqttTopic" placeholder="房间设备mqtt主题"></el-input>
+                    </el-form-item>
+
                     <el-form-item label="计费模式" prop="billing_id">
                         <el-select v-model="dialog_form.billing_id" placeholder="请选择计费模式">
                             <el-option
@@ -87,6 +92,7 @@
                 },
                 dialog_form: {
                     room_id: this.row ? this.row.room_id : "",
+                    deviceMqttTopic: this.row ? this.row.deviceMqttTopic : "",
                     room_name: this.row ? this.row.room_name : "",
                     seats_num: this.row ? this.row.seats_num : 16,
                     describe: this.row ? this.row.describe : '',
