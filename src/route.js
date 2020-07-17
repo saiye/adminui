@@ -90,6 +90,12 @@ export const constantRoutes = [
                 component: () => import('./views/logs/action_list'),
                 hidden: false,
                 meta: {title: '操作日志', icon: 'example'},
+            }, {
+                path: 'api-log',
+                name: 'logs-api-list',
+                component: () => import('./views/logs/api_log'),
+                hidden: false,
+                meta: {title: 'api调试log', icon: 'example'},
             },{
                 path: 'error',
                 name: 'logs-error',

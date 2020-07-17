@@ -24,3 +24,18 @@ export function actionLogList(data) {
     })
 }
 
+export function apiLogList(data) {
+    return request({
+        url: '/main/log/api-log-list',
+        method: 'post',
+        data
+    })
+}
+export function setRecordSwitch(data) {
+    return request({
+        url: 'main/log/set-api-log-switch',
+        method: 'post',
+        data
+    })
+}
+
