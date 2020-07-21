@@ -2,7 +2,7 @@
     <el-container >
         <el-aside width="200px">
             <div class="left-logo">
-                <span>狼人杀总管端</span>
+                <span>{{title}}</span>
             </div>
             <el-menu :default-active="$route.name" class="el-menu-vertical-demo">
                 <el-submenu :index="item.name"  v-for="item in routes" :key="item.name">
@@ -46,6 +46,7 @@
 </template>
 <script>
     import route from "@/route.js";
+    import getPageTitle from "@/tools/get-page-title";
 
     export default {
         data() {
@@ -58,6 +59,7 @@
                 }),
                 user_name: this.$store.getters.user_name,
                 user_id: this.$store.getters.user_id,
+                title: getPageTitle(),
             }
         },
         methods: {

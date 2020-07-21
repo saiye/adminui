@@ -71,7 +71,7 @@
 
                     <el-form :model="dialog_form" ref="dialog_form" :rules="rules" label-width="120px">
                         <el-form-item label="所属门店" prop="storeArr">
-                            <el-cascader placeholder="选择所在区域" v-on:change="loadBillingData" v-model=dialog_form.storeArr
+                            <el-cascader placeholder="选择所在门店" v-on:change="loadBillingData" v-model=dialog_form.storeArr
                                          :props="storeListData" clearable></el-cascader>
                         </el-form-item>
                         <el-form-item label="房间名称" prop="room_name">
