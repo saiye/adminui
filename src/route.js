@@ -106,6 +106,23 @@ export const constantRoutes = [
         ]
     },
     {
+        path: '/set',
+        component: Layout,
+        redirect: '/set/getList',
+        name: 'set',
+        hidden: false,
+        meta: {title: '系统管理', icon: 'example'},
+        children: [
+            {
+                path: 'getList',
+                name: 'set-getList',
+                component: () => import('./views/set/list'),
+                hidden: false,
+                meta: {title: '站点配置', icon: 'example'},
+            },
+        ]
+    },
+    {
         path: '/business',
         component: Layout,
         name: 'business-list',

@@ -31,4 +31,11 @@ export function userList(data) {
         data
     })
 }
+export function setJudge(data) {
+    return request({
+        url: '/game/index/setJudge',
+        method: 'post',
+        data
+    })
+}
 

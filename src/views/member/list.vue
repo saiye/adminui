@@ -1,18 +1,19 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="会员列表"   name="list">
-            <el-form  :model="form_list"  ref="searchForm" >
+        <el-tab-pane label="会员列表" name="list">
+            <el-form :model="form_list" ref="searchForm">
                 <el-form-item prop="search_name">
                     <el-row>
-                        <el-col :span="6" >
-                            <el-input v-model="form_list.search_name"   placeholder="请输入会员的账号，昵称，真实姓名，邮箱地址进行搜索">
+                        <el-col :span="6">
+                            <el-input v-model="form_list.search_name" placeholder="请输入会员的账号，昵称，真实姓名，邮箱地址进行搜索">
                             </el-input>
                         </el-col>
                         <el-col :span="2">
                             <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
                         </el-col>
                         <el-col :span="2">
-                            <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
+                            <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置
+                            </el-button>
                         </el-col>
                     </el-row>
                 </el-form-item>
@@ -28,7 +29,8 @@
                     </el-button>
                 </el-col>
             </el-row>
-            <add_user v-on:handelConfirm="handleDialogConfirm"  v-on:handelCance="handleDialogCance" v-bind:visible="visible"  v-bind:user="user"></add_user>
+            <add_user v-on:handelConfirm="handleDialogConfirm" v-on:handelCance="handleDialogCance"
+                      v-bind:visible="visible" v-bind:user="user"></add_user>
             <el-table
                     v-loading="ListLoading"
                     :data="tableListData"
@@ -38,9 +40,9 @@
                     header-cell-class-name="table-header-class"
                     :row-class-name="tableRowClassName"
                     style="width:100%">
-                <el-table-column prop="id" label="序号" ></el-table-column>
+                <el-table-column prop="id" label="序号"></el-table-column>
                 <el-table-column prop="account" label="会员账号"></el-table-column>
-                <el-table-column  label="是否为法官">
+                <el-table-column label="是否为法官">
                     <template slot-scope="scope">
                         <span>{{scope.row.judge==1?'是':'否'}}</span>
                     </template>
@@ -56,9 +58,11 @@
                 </el-table-column>
                 <el-table-column align="right" label="操作">
                     <template slot-scope="scope">
-                        <span><el-button size="mini" type="primary"  @click="handleEdit(scope.row)" round>编辑</el-button></span>
-                       <span> <el-button size="mini"  type="danger" @click="handleLock(2, scope.row)" round>禁封</el-button></span>
-                      <span><el-button size="mini"  type="success" @click="handleLock(1, scope.row)" round>解封</el-button></span>
+                        <span><el-button size="mini" type="primary" @click="handleJudge(1,scope.row)" round>设置为法官</el-button></span>
+                        <span><el-button size="mini" type="danger" @click="handleJudge(2,scope.row)" round>取消法官</el-button></span>
+                        <span><el-button size="mini" type="primary" @click="handleEdit(scope.row)" round>编辑</el-button></span>
+                        <span> <el-button size="mini" type="danger" @click="handleLock(2, scope.row)" round>禁封</el-button></span>
+                        <span><el-button size="mini" type="success" @click="handleLock(1, scope.row)" round>解封</el-button></span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -83,15 +87,17 @@
 </template>
 <style>
     .el-table .warning-row {
-        background:#f3dfdf;
+        background: #f3dfdf;
     }
+
     .el-table .success-row {
         background: #f0f9eb;
     }
 </style>
 <script>
-    import {userList,lockUser} from '@/api/user';
-    import  add_user from '@/components/users/add_user';
+    import {userList, lockUser, setJudge} from '@/api/user';
+    import add_user from '@/components/users/add_user';
+
     export default {
         components: {
             add_user,
@@ -100,8 +106,8 @@
             return {
                 activeName: 'list',
                 tableListData: [],
-                ListLoading:false,
-                visible:false,
+                ListLoading: false,
+                visible: false,
                 user: {
                     id: "",
                     account: "",
@@ -110,20 +116,20 @@
                     real_name: "",
                     nickname: "",
                     email: "",
-                    sex:0,
-                    judge:2,
+                    sex: 0,
+                    judge: 2,
                 },
                 Paginate: {
-                    total:0,        // 总数
+                    total: 0,        // 总数
                     pageIndex: 1,  // 当前位于哪页
-                    pageSize:15,   // 1页显示多少条
+                    pageSize: 15,   // 1页显示多少条
                     pageSizes: [5, 10, 15, 20],  //每页显示多少条
                     layout: "total, sizes, prev, pager, next, jumper"   // 翻页属性
                 },
                 form_list: {
                     search_name: '',
-                    page:1,
-                    limit:15,
+                    page: 1,
+                    limit: 15,
                 },
             };
         },
@@ -132,74 +138,80 @@
         },
         methods: {
             tableRowClassName({row, rowIndex}) {
-                if (row.lock==2) {
+                if (row.lock == 2) {
                     return 'warning-row';
                 } else {
                     return 'success-row';
                 }
             },
-            handleLock(lock,row){
+            handleLock(lock, row) {
                 lockUser({
-                    'user_id':row.id,
-                    'lock':lock,
+                    'user_id': row.id,
+                    'lock': lock,
                 }).then(response => {
-                       this.loadUserListData();
+                    this.loadUserListData();
+                })
+                    .catch(function (error) {
                     })
-                    .catch(function(error) {
-                    })
-                    .then(function() {
+                    .then(function () {
                     });
             },
-            openAddUserDialog(){
-                this.visible=true;
-                this.user.id='';
+            openAddUserDialog() {
+                this.visible = true;
+                this.user.id = '';
             },
-            handleEdit(row){
+            handleEdit(row) {
                 console.log('edit--props')
-                this.visible=true;
-                this.user=row;
+                this.visible = true;
+                this.user = row;
             },
-            handleDialogConfirm(){
-                this.visible=false;
+            handleDialogConfirm() {
+                this.visible = false;
                 this.loadUserListData();
             },
-            handleDialogCance(){
-                this.visible=false;
+            handleDialogCance() {
+                this.visible = false;
             },
             handleClick(tab, event) {
                 console.log(tab.name);
             },
-            loadUserListData(){
+            loadUserListData() {
                 userList(this.form_list)
                     .then(response => {
                         this.tableListData = response.data.data.data;
                         this.Paginate.total = response.data.data.total;
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                     })
-                    .then(function() {
+                    .then(function () {
                     });
 
             },
-            handleUserChangePage(page){
+            handleUserChangePage(page) {
                 this.Paginate.pageIndex = page;
                 this.form_list.page = page;
                 this.loadUserListData();
             },
-            handleUserChangeSize(pageSize){
+            handleUserChangeSize(pageSize) {
                 this.Paginate.pageSize = pageSize;
                 this.form_list.limit = pageSize;
                 this.loadUserListData();
             },
-            onSearchList(){
+            onSearchList() {
                 this.loadUserListData();
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
-                this.form_list.search_name='';
-                this.form_list.page=1;
-                this.form_list.limit=15;
+                this.form_list.search_name = '';
+                this.form_list.page = 1;
+                this.form_list.limit = 15;
                 this.loadUserListData();
+            },
+            handleJudge(judge, row) {
+                setJudge({
+                    'user_id': row.id,
+                    'judge': judge,
+                })
             }
         }
     };

@@ -4,7 +4,7 @@
             <div class="add-dialog-box">
                 <el-form :model="dialog_form" label-width="100px" :rules="rules" ref="dialog_form">
                     <el-form-item prop="account" label="会员账号">
-                        <el-input v-model="dialog_form.account"  :disabled="dialog_form.id>0" placeholder="请选择设置会员账号最长20位"></el-input>
+                        <el-input v-model="dialog_form.account"  :disabled="dialog_form.id>0" placeholder="请选择设置会员账号最长50位"></el-input>
                     </el-form-item>
                     <el-form-item prop="password" label="密码">
                         <el-input v-model="dialog_form.password" placeholder="请选择设置会员密码" show-password></el-input>
@@ -117,8 +117,8 @@
                 },
                 rules: {
                     account: [
-                        {required: true, message: '请输入会员账号最长20位', trigger: 'blur'},
-                        {min: 3, max: 20, message: '长度在 3 到 20个字符', trigger: 'blur'}
+                        {required: true, message: '请输入会员账号最长50位', trigger: 'blur'},
+                        {min: 3, max:50, message: '长度在 3 到 50个字符', trigger: 'blur'}
                     ],
                     password: [
                         {validator:  validateAffirmPassword, trigger: 'blur'},
