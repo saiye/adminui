@@ -22,6 +22,7 @@ service.interceptors.request.use(
        if (store.getters.upload) {
            config.headers['Content-Type'] ='multipart/form-data';
         }
+        config.headers['logicType'] = 'admin';
         return config
     },
     error => {

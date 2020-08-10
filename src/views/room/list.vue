@@ -408,6 +408,7 @@
                 this.dialog_form.devices = row.devices;
                 this.dialog_form.billing_id = row.billing_id;
                 this.dialog_form.dup_id = row.dup_id;
+                this.dialog_form.deviceMqttTopic = row.deviceMqttTopic;
                 this.dialog_form.storeArr = [row.company_id,row.store_id];
                 this.loadBillingData([row.company_id,row.store_id]);
             },
