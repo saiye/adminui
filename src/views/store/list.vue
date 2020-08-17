@@ -1,7 +1,9 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
+        <add_store v-on:success="successLoadData" @noticeCloseDialog="noticeCloseDialog" v-bind:show="showStoreDialog"
+                   v-bind:store="store"></add_store>
         <el-tab-pane label="店面列表" :inline="true" name="list">
-            <el-form :inline="true"  ref="searchForm"  :model="form_list" class="demo-form-inline">
+            <el-form :inline="true" ref="searchForm" :model="form_list" class="demo-form-inline">
                 <el-form-item prop="company_name">
                     <el-input v-model="form_list.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
@@ -28,7 +30,19 @@
                     <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
-            <add_store v-on:success="loadStoreListData"></add_store>
+
+            <el-row>
+                <el-col :span="24">
+                    <el-button
+                            size="mini"
+                            style="float: right;margin-right: 20px;margin-bottom: 10px;"
+                            @click="handelShowStore"
+                            round
+                    >添加店面
+                    </el-button>
+                </el-col>
+            </el-row>
+
             <el-table
                     v-loading="storeLoading"
                     :data="tableStoreData"
@@ -48,6 +62,18 @@
                 </el-table-column>
                 <el-table-column prop="staff.real_name" width="100" label="联系人"></el-table-column>
                 <el-table-column prop="staff.phone" label="联系电话"></el-table-column>
+                <el-table-column  label="状态">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.is_close==1?'关店':'开店'}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button size="mini" @click="detail(scope.row)" round>查看</el-button>
+                        <el-button size="mini" type="danger" @click="closeStore(1,scope.row)" round>关店</el-button>
+                        <el-button size="mini" type="primary" @click="closeStore(0,scope.row)" round>开店</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <el-row>
                 <el-col :span="24">
@@ -68,9 +94,9 @@
         </el-tab-pane>
         <el-tab-pane label="店面审核" name="check">
 
-            <el-form :inline="true"  ref="searchCheckForm" :model="form_check" class="demo-form-inline">
+            <el-form :inline="true" ref="searchCheckForm" :model="form_check" class="demo-form-inline">
                 <el-form-item prop="company_name">
-                    <el-input v-model="form_check.company_name"  placeholder="请输入商户名称"></el-input>
+                    <el-input v-model="form_check.company_name" placeholder="请输入商户名称"></el-input>
                 </el-form-item>
                 <el-form-item prop="store_name">
                     <el-input v-model="form_check.store_name" placeholder="请输入店面名称"></el-input>
@@ -92,7 +118,8 @@
 
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="onSearchCheckList" round>查询</el-button>
-                    <el-button type="danger" icon="el-icon-search" @click="resetCheckForm('searchCheckForm')" round>重置</el-button>
+                    <el-button type="danger" icon="el-icon-search" @click="resetCheckForm('searchCheckForm')" round>重置
+                    </el-button>
                 </el-form-item>
             </el-form>
             <el-table
@@ -120,6 +147,8 @@
                         <el-button size="mini" type="primary" @click="handleCheckStore(1,scope.row)" round>通过
                         </el-button>
                         <el-button size="mini" type="danger" @click="handleCheckStore(2,scope.row)" round>拒绝</el-button>
+
+                        <el-button size="mini" @click="detail(scope.row)" round>查看</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -165,7 +194,7 @@
 </template>
 <script>
     import add_store from '@/components/store/add_store';
-    import {storeList, checkStore} from '@/api/store';
+    import {storeList, checkStore, closeStore} from '@/api/store';
 
     export default {
         components: {
@@ -176,7 +205,9 @@
                 activeName: 'list',
                 tableStoreData: [],
                 dialogRejectVisible: false,
+                showStoreDialog: false,
                 tableStoreCheckData: [],
+                store: null,
                 ListPaginate: {
                     total: 0,        // 总数
                     pageIndex: 1,  // 当前位于哪页
@@ -262,7 +293,15 @@
             this.loadStoreListData();
         },
         methods: {
+            successLoadData() {
+                if (this.activeName == 'list') {
+                    this.loadStoreListData()
+                } else {
+                    this.loadStoreCheckListData();
+                }
+            },
             handleTabClick(tab, event) {
+                this.activeName = tab.name;
                 if (tab.name == 'list') {
                     this.loadStoreListData();
                 } else {
@@ -275,10 +314,9 @@
                     this.tableStoreData = response.data.data.data;
                     this.ListPaginate.total = response.data.data.total;
                     this.storeLoading = false;
+                }).catch(function (error) {
+                    console.log(error);
                 })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
             },
             loadStoreCheckListData() {
                 this.checkLoading = true;
@@ -359,6 +397,27 @@
             resetCheckForm(formName) {
                 this.$refs[formName].resetFields();
                 this.loadStoreCheckListData();
+            },
+            detail(row) {
+                this.store = Object.assign({}, row);
+                this.showStoreDialog = true;
+            },
+            noticeCloseDialog() {
+                this.showStoreDialog = false;
+            },
+            handelShowStore() {
+                this.store = null;
+                this.showStoreDialog = true;
+            },
+            closeStore(close, row) {
+                closeStore({
+                    store_id: row.store_id,
+                    close: close,
+                }).then(response => {
+                    this.loadStoreListData()
+                }).catch(function (error) {
+                }).then(function () {
+                });
             }
         }
     };

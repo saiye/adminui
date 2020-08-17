@@ -23,3 +23,25 @@ export function checkStore(data) {
         data
     })
 }
+
+export function editStore(data) {
+    return request({
+        url: '/store/index/editStore',
+        method: 'post',
+        data
+    })
+}
+export function storeTagList(data) {
+    return request({
+        url: '/store/index/tagList',
+        method: 'post',
+        data
+    })
+}
+export function closeStore(data) {
+    return request({
+        url: '/store/index/closeStore',
+        method: 'post',
+        data
+    })
+}
