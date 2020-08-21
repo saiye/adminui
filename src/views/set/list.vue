@@ -112,11 +112,11 @@
 
     export default {
         data() {
-            let re = new RegExp("^[a-zA-Z]+$");
+            let re = new RegExp("^[a-zA-Z0-9]+$");
             let keyCheck = (rule, value, callback) => {
 
                 if (!re.test(value)) {
-                    return callback(new Error('key必须是英文'));
+                    return callback(new Error('key必须是英文或者数字'));
                 }
                 if (value.length < 1 || value.length > 30) {
                     return callback(new Error('key长度1-30个字符串'));
