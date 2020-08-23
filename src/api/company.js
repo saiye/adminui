@@ -13,6 +13,13 @@ export function addCompany(data) {
         data
     })
 }
+export function editCompany(data) {
+    return request({
+        url: '/company/index/editCompany',
+        method: 'post',
+        data
+    })
+}
 export function checkCompany(data) {
     return request({
         url: '/company/index/checkCompany',

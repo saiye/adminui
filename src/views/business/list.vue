@@ -1,7 +1,7 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick">
+        <add_business v-bind:state="state"  @noticeCloseDialog="noticeCloseDialog"  v-bind:show="showDialog"  v-bind:company="company"   v-on:success="loadBusinessListData"></add_business>
         <el-tab-pane label="商户列表" :inline="true" name="list">
-
             <el-form :inline="true"  ref="searchForm"  :model="form_list" class="demo-form-inline">
                 <el-form-item prop="company_name">
                     <el-input v-model="form_list.company_name" placeholder="请输入商户名称"></el-input>
@@ -9,8 +9,8 @@
                 <el-form-item prop="real_name">
                     <el-input v-model="form_list.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
-                <el-form-item prop="state_id">
-                    <el-select v-model="form_list.state_id" clearable placeholder="请选择国家">
+                <el-form-item prop="area_code">
+                    <el-select v-model="form_list.area_code" clearable placeholder="请选择国家">
                         <el-option
                                 v-for="item in state"
                                 :key="item.value"
@@ -30,14 +30,23 @@
                             :default-time="['00:00:00', '23:59:59']"
                     ></el-date-picker>
                 </el-form-item>
-
-
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
                     <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
                 </el-form-item>
             </el-form>
-            <add_business v-bind:state="state" v-on:success="loadBusinessListData"></add_business>
+
+            <el-row>
+                <el-col :span="24">
+                    <el-button
+                            size="mini"
+                            style="float: right;margin-right: 20px;margin-bottom: 10px;"
+                            @click="addCompany"
+                            round
+                    >添加商户</el-button>
+                </el-col>
+            </el-row>
+
             <el-table
                     v-loading="BusinessLoading"
                     :data="tableBusinessData"
@@ -59,9 +68,10 @@
                         <span>{{scope.row.status==1?'正常':'禁封'}}</span>
                     </template>
                 </el-table-column>
-
                 <el-table-column align="right" label="操作">
                     <template slot-scope="scope">
+                        <el-button size="mini" @click="companyDetail(scope.row)" type="primary" round>编辑</el-button>
+
                         <el-button size="mini" @click="lockCompany(1, scope.row)" type="primary"
                                    v-if="scope.row.status==2" round>解冻
                         </el-button>
@@ -121,8 +131,8 @@
                 <el-form-item prop="real_name">
                     <el-input v-model="check_list.real_name" placeholder="请输入联系人名称"></el-input>
                 </el-form-item>
-                <el-form-item prop="state_id">
-                    <el-select v-model="check_list.state_id" clearable placeholder="请选择国家">
+                <el-form-item prop="area_code">
+                    <el-select v-model="check_list.area_code" clearable placeholder="请选择国家">
                         <el-option
                                 v-for="item in state"
                                 :key="item.value"
@@ -171,6 +181,7 @@
                 </el-table-column>
                 <el-table-column align="right" label="操作">
                     <template slot-scope="scope">
+                        <el-button type="primary"  size="mini"  @click="companyDetail(scope.row)" round>编辑</el-button>
                         <el-button
                                 size="mini"
                                 type="primary"
@@ -227,6 +238,8 @@
                 tableBusinessData: [],
                 tableCheckBusinessData: [],
                 dialogRejectVisible: false,
+                showDialog:false,
+                company:null,
                 rejectMessage: {
                     check: '',
                     company_id: '',
@@ -259,7 +272,7 @@
                     account: "",
                     company_name: "",
                     real_name: "",
-                    state_id: '',
+                    area_code: '',
                     start_date: "",
                     end_date: "",
                     listDate: "",
@@ -271,7 +284,7 @@
                     account: "",
                     company_name: "",
                     real_name: "",
-                    state_id: '',
+                    area_code: '',
                     start_date: "",
                     end_date: "",
                     listDate: "",
@@ -458,6 +471,17 @@
                 this.$refs[formName].resetFields();
                 this.loadCheckListData();
             },
+            companyDetail(row){
+                this.showDialog=true;
+                this.company=Object.assign({},row);
+            },
+            noticeCloseDialog() {
+                this.showDialog = false;
+            },
+            addCompany(){
+                this.company=null;
+                this.showDialog = true;
+            }
         }
     };
 </script>
