@@ -54,7 +54,6 @@
                 <el-table-column prop="store_id" label="序号" width="100"></el-table-column>
                 <el-table-column prop="store_name" label="店面名称"></el-table-column>
                 <el-table-column prop="company.company_name" label="商户名称"></el-table-column>
-                <el-table-column prop="created_at" width="100" label="注册日期"></el-table-column>
                 <el-table-column label="地区">
                     <template slot-scope="scope">
                         <span>{{scope.row.province.area_name}}/{{scope.row.city.area_name}}/{{scope.row.region.area_name}}</span>
@@ -67,6 +66,7 @@
                         <span>{{scope.row.is_close==1?'关店':'开店'}}</span>
                     </template>
                 </el-table-column>
+                <el-table-column prop="created_at" width="100" label="创建日期"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="detail(scope.row)" round>查看</el-button>
@@ -133,7 +133,6 @@
                 <el-table-column prop="store_id" label="序号" width="100"></el-table-column>
                 <el-table-column prop="store_name" label="店面名称"></el-table-column>
                 <el-table-column prop="company.company_name" label="商户名称"></el-table-column>
-                <el-table-column prop="created_at" width="100" label="注册日期"></el-table-column>
                 <el-table-column label="地区">
                     <template slot-scope="scope">
                         <span>{{scope.row.province.area_name}}/{{scope.row.city.area_name}}/{{scope.row.region.area_name}}</span>
@@ -142,6 +141,7 @@
                 <el-table-column prop="staff.real_name" width="100" label="联系人"></el-table-column>
                 <el-table-column prop="staff.phone" label="联系电话"></el-table-column>
                 <el-table-column prop="reason" label="拒绝原因"></el-table-column>
+                <el-table-column prop="created_at" width="100" label="创建日期"></el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" @click="handleCheckStore(1,scope.row)" round>通过

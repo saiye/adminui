@@ -11,8 +11,7 @@
                 </div>
             </el-col>
             <el-col :span="21">
-                <el-row v-for="(sub,i) in menu" :key="i"
-                        style="border-style:dashed; border-width: 1px 1px; margin:5px;">
+                <el-row v-for="(sub,i) in menu" :key="i">
                     <el-checkbox-group v-model="checkedRole">
                         <el-col :span="3">
                             <el-checkbox :label="i" :checked="sub.checked" @change="handleCheckedRoleChange" :key="i">
@@ -20,8 +19,7 @@
                             </el-checkbox>
                         </el-col>
                         <el-col :span="21">
-                            <el-row v-for="(m,j) in sub.child" :key="j"
-                                    style="border-style:dashed; border-width: 1px 1px; margin:5px;">
+                            <el-row v-for="(m,j) in sub.child" :key="j">
                                 <el-col :span="3">
                                     <el-checkbox :checked="m.checked" :label="i+'.'+j" :key="i+'.'+j"
                                                  @change="handleCheckedRoleChange">{{m.name}}
@@ -29,8 +27,7 @@
                                 </el-col>
                                 <el-col :span="21">
                                     <el-row>
-                                        <el-col :span="3" v-for="(s,l) in m.child" :key="l"
-                                                style="border-style:dashed; border-width: 1px 1px; margin:5px;">
+                                        <el-col :span="3" v-for="(s,l) in m.child" :key="l">
                                             <el-checkbox :checked="s.checked" :label="i+'.'+j+'.'+l"
                                                          :key="i+'.'+j+'.'+l">{{s.name}}
                                             </el-checkbox>

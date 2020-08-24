@@ -230,8 +230,8 @@
                         {min: 1, max: 100, message: '长度在 1 到 100个字符', trigger: 'blur'}
                     ],
                     store_name: [
-                        {required: true, message: '请输入店面名称最长30位', trigger: 'blur'},
-                        {min: 1, max:30, message: '长度在 1 到 30个字符', trigger: 'blur'}
+                        {required: true, message: '请输入店面名称最长6位', trigger: 'blur'},
+                        {min: 1, max:6, message: '长度在 1 到 6个字符', trigger: 'blur'}
                     ],
                     address: [
                         {required: true, message: '请选择填写店面地址最长100位',trigger: 'blur'},
