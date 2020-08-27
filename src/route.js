@@ -120,6 +120,13 @@ export const constantRoutes = [
                 hidden: false,
                 meta: {title: '站点配置', icon: 'example'},
             },
+            {
+                path: 'smsList',
+                name: 'set-smsList',
+                component: () => import('./views/set/smsList'),
+                hidden: false,
+                meta: {title: '短信消息', icon: 'example'},
+            },
         ]
     },
     {

@@ -30,6 +30,13 @@ export function putFile(data) {
         data
     })
 }
+export function sendSmsList(data) {
+    return request({
+        url: '/main/set/sendSmsList',
+        method: 'post',
+        data
+    })
+}
 
 
 
