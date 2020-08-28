@@ -2,7 +2,7 @@
     <div>
         <el-dialog :title=dialogTitle :close-on-click-modal="closeModal"  :visible.sync="dialogVisible"  @close="noticeCloseDialog">
             <div class="add-dialog-box">
-                <el-form :model="dialog_form"  ref="dialog_form" :rules="rules" label-width="100px">
+                <el-form :model="dialog_form"  ref="dialog_form" :rules="rules" label-width="160px">
 
                     <el-form-item label="所属商户"  prop="company_id">
                         <el-select v-model="dialog_form.company_id">
@@ -33,6 +33,19 @@
                         </el-checkbox-group>
                     </el-form-item>
 
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="开始营业时间"  prop="open_at">
+                                <el-input v-model.number="dialog_form.open_at"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="营业结束时间"  prop="close_at">
+                                <el-input v-model.number="dialog_form.close_at"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
                     <el-form-item label="店面经纬度"  prop="point">
                         <el-row>
                             <el-col :span="8">
@@ -42,9 +55,7 @@
                                 <el-link href="http://api.map.baidu.com/lbsapi/getpoint/" target="_blank">经纬度坐标捨取<i class="el-icon-view el-icon--right"></i> </el-link>
                             </el-col>
                         </el-row>
-
                     </el-form-item>
-
                     <el-form-item label="店面照片">
                         <el-upload
                                 action=""
@@ -139,6 +150,8 @@
                     this.dialog_form={
                         imageData:imageData,
                         describe:store.describe,
+                        close_at:store.close_at,
+                        open_at:store.open_at,
                         store_name: store.store_name,
                         store_id: store.store_id,
                         company_id: store.company_id,
@@ -180,6 +193,16 @@
                 callback();
             };
 
+            let checkOpenAtAndCloseAt=(rule, value, callback) => {
+                if(isNaN(value)){
+                    return callback(new Error('营业时间必须是个数字'));
+                }
+                if(value<0||value>24){
+                    return callback(new Error('营业时间范围0-24'));
+                }
+                callback();
+            };
+
             let checkPassword=(rule, value, callback) => {
                 if(!this.dialog_form.store_id){
                     if(!value){
@@ -204,6 +227,8 @@
                 dialog_form: {
                     imageData:[],
                     store_id: "",
+                    close_at:'',
+                    open_at:'',
                     describe: "",
                     store_name: "",
                     company_id: "",
@@ -257,7 +282,15 @@
                     ],
                     area: [
                         {required: true, message: '请选择店面地区',trigger: 'change'},
-                    ]
+                    ],
+                    close_at: [
+                        {required: true, message: '请选择填开始营业时间',trigger: 'blur'},
+                        {validator:checkOpenAtAndCloseAt,trigger: 'blur'}
+                    ],
+                    open_at: [
+                        {required: true, message: '请选择填停止营业时间，取值范围0-24',trigger: 'blur'},
+                        {validator:checkOpenAtAndCloseAt,trigger: 'blur'}
+                    ],
                 },
                 areaListData: {
                     lazy: true,
@@ -298,6 +331,8 @@
                     password: "",
                     sex:'1',
                     point:'',
+                    close_at:'',
+                    open_at:'',
                     area:[],
                 }
             },
