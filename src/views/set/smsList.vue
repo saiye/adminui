@@ -122,6 +122,10 @@
                 this.form_list.limit = pageSize;
                 this.loadSmsListData();
             },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+                this.loadSmsListData();
+            },
         }
     };
 </script>

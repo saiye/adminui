@@ -248,6 +248,23 @@ export const constantRoutes = [
             }
         ]
     },
+    {
+        path: '/order',
+        component: Layout,
+        name: 'order-list',
+        hidden:false,
+        redirect: '/order/list',
+        meta: {title: '订单管理', icon: 'example'},
+        children: [
+            {
+                path: 'list',
+                name: 'order-list',
+                component: () => import('./views/order/order_list'),
+                hidden: false,
+                meta: {title: '订单管理', icon: 'example'}
+            }
+        ]
+    },
     {path: '*', redirect: '/404', name: 'alias-404',hidden: true}
 ]
 
