@@ -36,6 +36,7 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="handleEditChannel(scope.row)" round>编辑渠道</el-button>
+                        <el-button size="mini" type="danger" @click="handleRemoveChannel(scope.row)" round>删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -82,7 +83,7 @@
     </el-tabs>
 </template>
 <script>
-    import {channelList, addChannel, editChannel} from "@/api/channel";
+    import {channelList, addChannel, editChannel,delChannel} from "@/api/channel";
 
     export default {
         data() {
@@ -231,6 +232,14 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
                 this.loadChannelListData();
+            },
+            handleRemoveChannel(row){
+                delChannel({'channel_id':row.channel_id}).then(response => {
+                    this.loadChannelListData();
+                }).catch(function (error) {
+                }).then(function () {
+
+                });
             }
         }
     };

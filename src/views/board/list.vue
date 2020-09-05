@@ -31,7 +31,7 @@
                     highlight-current-row
                     header-cell-class-name="table-header-class"
                     style="width:100%">
-                <el-table-column prop="board_id" label="序号"></el-table-column>
+                <el-table-column  :index="indexBoardList" type="index" label="序号"></el-table-column>
                 <el-table-column prop="board_name" label="板子名称"></el-table-column>
                 <el-table-column prop="dup_id" label="板子id"></el-table-column>
                 <el-table-column label="操作">
@@ -243,6 +243,9 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
                 this.loadBoardListData();
+            },
+            indexBoardList(index){
+                return index+1;
             }
         }
     };

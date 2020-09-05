@@ -51,7 +51,7 @@
                     highlight-current-row
                     header-cell-class-name="table-header-class"
                     style="width:100%">
-                <el-table-column prop="store_id" label="序号" width="100"></el-table-column>
+                <el-table-column :index="indexStoreList" type="index" label="序号" width="100"></el-table-column>
                 <el-table-column prop="store_name" label="店面名称"></el-table-column>
                 <el-table-column prop="company.company_name" label="商户名称"></el-table-column>
                 <el-table-column label="地区">
@@ -130,7 +130,7 @@
                     highlight-current-row
                     header-cell-class-name="table-header-class"
                     style="width:100%">
-                <el-table-column prop="store_id" label="序号" width="100"></el-table-column>
+                <el-table-column :index="indexCheckStoreList"  type="index" label="序号" width="100"></el-table-column>
                 <el-table-column prop="store_name" label="店面名称"></el-table-column>
                 <el-table-column prop="company.company_name" label="商户名称"></el-table-column>
                 <el-table-column label="地区">
@@ -418,6 +418,12 @@
                 }).catch(function (error) {
                 }).then(function () {
                 });
+            },
+            indexStoreList(index){
+               return index+1;
+            },
+            indexCheckStoreList(index){
+                return index+1;
             }
         }
     };

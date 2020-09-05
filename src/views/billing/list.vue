@@ -42,7 +42,7 @@
                     highlight-current-row
                     header-cell-class-name="table-header-class"
                     style="width:100%">
-                <el-table-column prop="billing_id" label="序号"></el-table-column>
+                <el-table-column :index="indexBillingList" type="index" label="序号"></el-table-column>
                 <el-table-column prop="company_name" label="商家名称"></el-table-column>
                 <el-table-column prop="store_name" label="面店名称"></el-table-column>
                 <el-table-column prop="billing_name" label="模式名称"></el-table-column>
@@ -157,6 +157,9 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
                 this.loadUserListData();
+            },
+            indexBillingList(index){
+                return index+1;
             }
         }
     };

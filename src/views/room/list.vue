@@ -32,7 +32,7 @@
                     highlight-current-row
                     header-cell-class-name="table-header-class"
                     style="width:100%">
-                <el-table-column prop="room_id" label="序号"></el-table-column>
+                <el-table-column  :index="indexRoomList" type="index" label="序号"></el-table-column>
                 <el-table-column prop="room_name" label="房间名称"></el-table-column>
                 <el-table-column prop="company.company_name" label="所属商户"></el-table-column>
                 <el-table-column prop="store.store_name" label="所在店面"></el-table-column>
@@ -475,6 +475,9 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
                 this.loadRoomListData();
+            },
+            indexRoomList(index){
+                return index+1;
             }
         }
     };
