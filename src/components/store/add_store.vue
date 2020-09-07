@@ -87,10 +87,23 @@
                             </template>
                         </el-input>
                     </el-form-item>
+
                     <el-form-item label="手机号码" prop="phone">
-                        <el-input v-model="dialog_form.phone">
-                            <template slot="prepend">+86中国大陆</template>
-                        </el-input>
+                    <el-input v-model="dialog_form.phone" >
+                        <template slot="prepend">
+                            <div style="width:100px;">
+                                <el-select v-model="dialog_form.phone_area_code" clearable  placeholder="请选择区号">
+                                    <el-option
+                                            v-for="item in stateData"
+                                            :key="item.value"
+                                            :label="'+'+item.value+item.name"
+                                            :value="item.value"
+                                    >
+                                    </el-option>
+                                </el-select>
+                            </div>
+                        </template>
+                    </el-input>
                     </el-form-item>
 
                     <el-form-item label="店长账号" prop="account">
@@ -116,7 +129,7 @@
     </div>
 </template>
 <script>
-    import {areaList,companyList} from "@/api/company";
+    import {areaList,companyList,getStateData} from "@/api/company";
     import {addStore,storeTagList,editStore} from "@/api/store";
     import {
         uploadImage,deleteImage
@@ -162,6 +175,7 @@
                         account: store.staff.account,
                         password: "",
                         sex:store.staff.sex,
+                        phone_area_code:store.staff.area_code,
                         point:store.lon+','+store.lat,
                         area:[store.province.area_id,store.city.area_id,store.region.area_id],
                     };
@@ -224,8 +238,10 @@
                 storeTags:[],
                 fileList:[],
                 companyListData: [],
+                stateData:[],
                 dialog_form: {
                     imageData:[],
+                    phone_area_code:'',
                     store_id: "",
                     close_at:'',
                     open_at:'',
@@ -313,6 +329,7 @@
         mounted(){
             this.loadStoreTags();
             this.remoteCompanyList();
+            this.loadStateData();
         },
         methods: {
             initData(){
@@ -431,6 +448,11 @@
                     this.loading=false;
                 });
             },
+            loadStateData(){
+                getStateData().then(response=>{
+                    this.stateData=response.data.data;
+                });
+            }
         }
     };
 </script>

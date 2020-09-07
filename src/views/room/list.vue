@@ -70,10 +70,26 @@
             <el-dialog :title=title :close-on-click-modal="closeModal" :visible.sync="dialogVisible" width="600px;">
 
                     <el-form :model="dialog_form" ref="dialog_form" :rules="rules" label-width="120px">
-                        <el-form-item label="所属门店" prop="storeArr">
-                            <el-cascader placeholder="选择所在门店" v-on:change="loadBillingData" v-model=dialog_form.storeArr
-                                         :props="storeListData" clearable></el-cascader>
-                        </el-form-item>
+                        <el-row>
+                            <el-col :span="12">
+                                <el-form-item label="所属门店" prop="storeArr">
+                                    <el-cascader placeholder="选择所在门店" v-on:change="loadBillingData" v-model=dialog_form.storeArr
+                                                 :props="storeListData" clearable></el-cascader>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="渠道选择" prop="channel_id">
+                                    <el-select v-model="dialog_form.channel_id" placeholder="请选择渠道">
+                                        <el-option
+                                                v-for="item in channelListData"
+                                                :key="item.channel_id"
+                                                :label="item.channel_name"
+                                                :value="item.channel_id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
                         <el-form-item label="房间名称" prop="room_name">
                             <el-input v-model="dialog_form.room_name" placeholder="请输入房间名字最长30位"></el-input>
                         </el-form-item>
@@ -151,7 +167,7 @@
     </el-tabs>
 </template>
 <script>
-    import {companyAndRoomList, roomList, addRoom, editRoom} from "@/api/room";
+    import {companyAndRoomList, roomList, addRoom, editRoom,channelList} from "@/api/room";
     import {billingList} from "@/api/billing";
     import {boardList} from "@/api/board";
     import {Message} from 'element-ui'
@@ -226,6 +242,7 @@
                 activeName:'list',
                 tableRoomData:[],
                 boardListData:[],
+                channelListData:[],
                 closeModal:false,
                 paginate: {
                     total: 0,        // 总数
@@ -274,6 +291,7 @@
                     describe: '',
                     devices: [],
                     billing_id: '',
+                    channel_id:'',
                     storeArr: [0,0],
                     delDevicesIds:[],
                 },
@@ -301,6 +319,9 @@
                     billing_id: [
                         {required: true, message: '请填选择计费模式', trigger: 'change'}
                     ],
+                    channel_id: [
+                        {required: true, message: '请选择渠道', trigger: 'change'}
+                    ],
                     devices:[
                         { validator:checkDevices, trigger: 'blur'}
                     ],
@@ -321,6 +342,7 @@
         mounted() {
             this.loadRoomListData();
             this.loadBoardList();
+            this.loadChannelListData();
         },
         computed:{
             title:function(){
@@ -409,6 +431,7 @@
                 this.dialog_form.billing_id = row.billing_id;
                 this.dialog_form.dup_id = row.dup_id;
                 this.dialog_form.deviceMqttTopic = row.deviceMqttTopic;
+                this.dialog_form.channel_id = row.channel_id;
                 this.dialog_form.storeArr = [row.company_id,row.store_id];
                 this.loadBillingData([row.company_id,row.store_id]);
             },
@@ -418,6 +441,7 @@
                 this.dialog_form.storeArr=[];
                 this.dialog_form.devices=[];
                 this.dialog_form.billing_id='';
+                this.dialog_form.channel_id='';
                 this.dialog_form.room_name='';
                 this.dialog_form.describe='';
                 this.billingData=[];
@@ -478,6 +502,13 @@
             },
             indexRoomList(index){
                 return index+1;
+            },
+            loadChannelListData(){
+                channelList({'limit':500}).then(response => {
+                    this.channelListData= response.data.data.data;
+                }).catch(function (error) {
+                }).then(function () {
+                });
             }
         }
     };

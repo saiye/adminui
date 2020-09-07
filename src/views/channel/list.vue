@@ -36,7 +36,9 @@
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button size="mini" @click="handleEditChannel(scope.row)" round>编辑渠道</el-button>
-                        <el-button size="mini" type="danger" @click="handleRemoveChannel(scope.row)" round>删除</el-button>
+                        <el-popconfirm title="确定删除该渠道吗？" @onConfirm="doRemoveChannel(scope.row)">
+                            <el-button slot="reference"  size="mini" type="danger"  round>删除</el-button>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
@@ -233,7 +235,7 @@
                 this.$refs[formName].resetFields();
                 this.loadChannelListData();
             },
-            handleRemoveChannel(row){
+            doRemoveChannel(row){
                 delChannel({'channel_id':row.channel_id}).then(response => {
                     this.loadChannelListData();
                 }).catch(function (error) {
