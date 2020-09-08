@@ -23,3 +23,11 @@ export function editChannel(data) {
         data
     })
 }
+
+export function delChannel(data) {
+    return request({
+        url: 'game/channel/delChannel',
+        method: 'post',
+        data
+    })
+}

@@ -40,7 +40,7 @@
                     header-cell-class-name="table-header-class"
                     :row-class-name="tableRowClassName"
                     style="width:100%">
-                <el-table-column prop="id" label="序号"></el-table-column>
+                <el-table-column :index="indexUserList" type="index" label="序号"></el-table-column>
                 <el-table-column prop="account" label="会员账号"></el-table-column>
                 <el-table-column label="是否为法官">
                     <template slot-scope="scope">
@@ -212,6 +212,9 @@
                     'user_id': row.id,
                     'judge': judge,
                 })
+            },
+            indexUserList(index){
+                return index+1;
             }
         }
     };

@@ -3,7 +3,7 @@
         <el-tab-pane label="计费模式列表" name="list">
             <el-form :model="form_list" :inline="true"  ref="searchForm">
                 <el-form-item prop="search_name">
-                    <el-input v-model="form_list.search_name" placeholder="请输入店面，模式名进行搜索"></el-input>
+                    <el-input v-model="form_list.search_name" placeholder="请输入模式名进行搜索"></el-input>
                 </el-form-item>
 
                 <el-form-item label="请选择计费单位" prop="time_type">
@@ -27,7 +27,6 @@
                         ></el-option>
                     </el-select>
                 </el-form-item>
-
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="onSearchList" round>查询</el-button>
                     <el-button type="danger" icon="el-icon-search" @click="resetForm('searchForm')" round>重置</el-button>
@@ -42,9 +41,8 @@
                     highlight-current-row
                     header-cell-class-name="table-header-class"
                     style="width:100%">
-                <el-table-column prop="billing_id" label="序号"></el-table-column>
+                <el-table-column :index="indexBillingList" type="index" label="序号"></el-table-column>
                 <el-table-column prop="company_name" label="商家名称"></el-table-column>
-                <el-table-column prop="store_name" label="面店名称"></el-table-column>
                 <el-table-column prop="billing_name" label="模式名称"></el-table-column>
                 <el-table-column  label="计费单价">
                     <template slot-scope="scope">
@@ -157,6 +155,9 @@
             resetForm(formName) {
                 this.$refs[formName].resetFields();
                 this.loadUserListData();
+            },
+            indexBillingList(index){
+                return index+1;
             }
         }
     };

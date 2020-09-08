@@ -56,7 +56,7 @@
                     header-cell-class-name="table-header-class"
                     style="width:100%"
             >
-                <el-table-column prop="company_id" label="序号"></el-table-column>
+                <el-table-column :index="indexListCompany" type="index" label="序号"></el-table-column>
                 <el-table-column prop="manage.account" label="账号"></el-table-column>
                 <el-table-column prop="company_name" label="商户名称"></el-table-column>
                 <el-table-column prop="state.name" label="国家"></el-table-column>
@@ -167,7 +167,7 @@
                     header-cell-class-name="table-header-class"
                     style="width:100%"
             >
-                <el-table-column prop="company_id" label="序号"></el-table-column>
+                <el-table-column :index=" indexCheckCompany" type="index" label="序号"></el-table-column>
                 <el-table-column prop="manage.account" label="账号"></el-table-column>
                 <el-table-column prop="company_name" label="商户名称"></el-table-column>
                 <el-table-column prop="state.name" label="国家"></el-table-column>
@@ -481,6 +481,12 @@
             addCompany(){
                 this.company=null;
                 this.showDialog = true;
+            },
+            indexCheckCompany(index){
+                return index+1;
+            },
+            indexListCompany(index){
+                return index+1;
             }
         }
     };

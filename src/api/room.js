@@ -31,4 +31,12 @@ export function roomList(data) {
     })
 }
 
+export function channelList(data) {
+    return request({
+        url: '/room/index/channelList',
+        method: 'post',
+        data
+    })
+}
+
 
