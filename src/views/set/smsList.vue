@@ -1,7 +1,7 @@
 <template>
     <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="短信发送列表" :inline="true" name="list">
-            <el-form :inline="true" :model="form_list" ref="searchForm" class="demo-form-inline">
+            <el-form :inline="true"  :model="form_list" ref="searchForm"  class="demo-form-inline">
                 <el-form-item prop="type">
                     <el-input v-model="form_list.type" placeholder="请输入type"></el-input>
                 </el-form-item>
@@ -27,6 +27,7 @@
                 <el-table-column prop="id" label="序号"></el-table-column>
                 <el-table-column prop="area_code" label="区号"></el-table-column>
                 <el-table-column prop="phone" label="号码"></el-table-column>
+                <el-table-column prop="created_at" label="时间"></el-table-column>
                 <el-table-column prop="msg" label="消息">
                     <template slot-scope="scope">
                         <el-row >

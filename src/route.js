@@ -127,6 +127,13 @@ export const constantRoutes = [
                 hidden: false,
                 meta: {title: '短信消息', icon: 'example'},
             },
+            {
+                path: 'areaList',
+                name: 'set-areaList',
+                component: () => import('./views/set/area_list'),
+                hidden: false,
+                meta: {title: '地区列表', icon: 'example'},
+            },
         ]
     },
     {
