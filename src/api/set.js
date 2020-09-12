@@ -37,6 +37,25 @@ export function sendSmsList(data) {
         data
     })
 }
-
-
+export function areaList(data) {
+    return request({
+        url: '/main/set/areaList',
+        method: 'post',
+        data
+    })
+}
+export function addArea(data) {
+    return request({
+        url: '/main/set/addArea',
+        method: 'post',
+        data
+    })
+}
+export function editArea(data) {
+    return request({
+        url: '/main/set/editArea',
+        method: 'post',
+        data
+    })
+}
 

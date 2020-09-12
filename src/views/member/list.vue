@@ -41,6 +41,13 @@
                     :row-class-name="tableRowClassName"
                     style="width:100%">
                 <el-table-column :index="indexUserList" type="index" label="序号"></el-table-column>
+                <el-table-column  label="头像">
+                    <template slot-scope="scope">
+                        <div>
+                            <el-image style="width:50px; height:50px" :src="scope.row.icon" fit="fill"></el-image>
+                        </div>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="account" label="会员账号"></el-table-column>
                 <el-table-column label="是否为法官">
                     <template slot-scope="scope">
