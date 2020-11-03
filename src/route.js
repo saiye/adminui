@@ -272,6 +272,23 @@ export const constantRoutes = [
             }
         ]
     },
+    {
+        path: '/bag',
+        component: Layout,
+        name: 'vip-user-list',
+        hidden:false,
+        redirect: '/bag/vip-user-list',
+        meta: {title: 'VIP会员', icon: 'example'},
+        children: [
+            {
+                path: 'vip-user-list',
+                name: 'vip-user-list',
+                component: () => import('./views/bag/vip_user_list'),
+                hidden: false,
+                meta: {title: 'VIP会员', icon: 'example'}
+    }
+        ]
+    },
     {path: '*', redirect: '/404', name: 'alias-404',hidden: true}
 ]
 
